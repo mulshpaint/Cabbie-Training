@@ -8,7 +8,7 @@ import Link from "next/link";
 const plans = [
   {
     tier: "Fixed Date",
-    price: 65,
+    price: 75,
     description: "Choose from our upcoming dates",
     featured: false,
     badge: null,
@@ -21,7 +21,7 @@ const plans = [
   },
   {
     tier: "Your Own Date",
-    price: 75,
+    price: 95,
     description: "Request any date that suits you",
     featured: true,
     badge: "Flexible",

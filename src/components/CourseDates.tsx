@@ -127,7 +127,7 @@ export default function CourseDates() {
   };
 
   return (
-    <SectionWrapper id="booking" className="px-[5%] py-20">
+    <SectionWrapper id="booking" className="px-[5%] py-20 scroll-mt-16">
       <div className="text-xs font-bold tracking-[2px] uppercase text-accent-blue mb-2">
         Upcoming Courses
       </div>

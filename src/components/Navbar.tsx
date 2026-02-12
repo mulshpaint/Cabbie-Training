@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { Menu, X, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 
@@ -16,6 +17,7 @@ const navLinks = [
 ];
 
 export default function Navbar() {
+  const { data: session } = useSession();
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
@@ -59,6 +61,17 @@ export default function Navbar() {
             <Link href="#booking">Book Now</Link>
           </Button>
         </li>
+        {session && (
+          <li>
+            <Link
+              href="/admin/dashboard"
+              className="p-2 rounded-lg text-text-muted hover:text-accent-blue hover:bg-white/5 transition-colors"
+              title="Admin"
+            >
+              <Settings className="w-4 h-4" />
+            </Link>
+          </li>
+        )}
       </ul>
 
       {/* Mobile nav */}
@@ -92,6 +105,16 @@ export default function Navbar() {
               >
                 <Link href="#booking">Book a Course →</Link>
               </Button>
+              {session && (
+                <Link
+                  href="/admin/dashboard"
+                  onClick={() => setOpen(false)}
+                  className="flex items-center gap-2 mt-2 py-3 px-3 text-text-muted font-medium hover:text-accent-blue transition-colors"
+                >
+                  <Settings className="w-4 h-4" />
+                  Admin Panel
+                </Link>
+              )}
             </div>
           </SheetContent>
         </Sheet>

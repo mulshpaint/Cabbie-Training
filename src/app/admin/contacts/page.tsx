@@ -1,8 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import AdminSidebar from "@/components/admin/AdminSidebar";
-import { Mail, MailOpen, Loader2 } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Mail, MailOpen, Loader2, Send } from "lucide-react";
 import { format } from "date-fns";
 import { toast } from "sonner";
 
@@ -21,7 +23,12 @@ interface ContactMsg {
 export default function AdminContacts() {
   const [contacts, setContacts] = useState<ContactMsg[]>([]);
   const [loading, setLoading] = useState(true);
-  const [selected, setSelected] = useState<ContactMsg | null>(null);
+  const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [replyText, setReplyText] = useState("");
+  const [sending, setSending] = useState(false);
+  const replyRef = useRef<HTMLTextAreaElement>(null);
+
+  const selected = contacts.find((c) => c._id === selectedId) || null;
 
   const fetchContacts = async () => {
     try {
@@ -39,37 +46,57 @@ export default function AdminContacts() {
     fetchContacts();
   }, []);
 
-  const markAsRead = async (id: string) => {
+  const updateContact = async (id: string, updates: Partial<ContactMsg>) => {
     try {
-      await fetch(`/api/admin/contacts/${id}`, {
+      const res = await fetch(`/api/admin/contacts/${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ read: true }),
+        body: JSON.stringify(updates),
       });
-      fetchContacts();
-    } catch {
-      toast.error("Failed to update");
-    }
-  };
-
-  const toggleReplied = async (id: string, replied: boolean) => {
-    try {
-      await fetch(`/api/admin/contacts/${id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ replied: !replied }),
-      });
-      toast.success(replied ? "Marked as unreplied" : "Marked as replied");
-      fetchContacts();
+      if (res.ok) {
+        await fetchContacts();
+      }
     } catch {
       toast.error("Failed to update");
     }
   };
 
   const handleSelect = (contact: ContactMsg) => {
-    setSelected(contact);
+    setSelectedId(contact._id);
+    setReplyText("");
     if (!contact.read) {
-      markAsRead(contact._id);
+      updateContact(contact._id, { read: true });
+    }
+  };
+
+  const toggleReplied = () => {
+    if (!selected) return;
+    const newVal = !selected.replied;
+    updateContact(selected._id, { replied: newVal });
+    toast.success(newVal ? "Marked as replied" : "Marked as needs reply");
+  };
+
+  const sendReply = async () => {
+    if (!selected || !replyText.trim()) return;
+    setSending(true);
+    try {
+      const res = await fetch(`/api/admin/contacts/${selected._id}/reply`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ message: replyText.trim() }),
+      });
+      if (res.ok) {
+        toast.success(`Reply sent to ${selected.email}`);
+        setReplyText("");
+        await fetchContacts();
+      } else {
+        const data = await res.json();
+        toast.error(data.error || "Failed to send reply");
+      }
+    } catch {
+      toast.error("Something went wrong");
+    } finally {
+      setSending(false);
     }
   };
 
@@ -104,7 +131,7 @@ export default function AdminContacts() {
                     key={contact._id}
                     onClick={() => handleSelect(contact)}
                     className={`w-full text-left px-5 py-4 border-b border-white/5 transition-colors cursor-pointer ${
-                      selected?._id === contact._id
+                      selectedId === contact._id
                         ? "bg-accent-blue/5"
                         : "hover:bg-white/3"
                     }`}
@@ -126,9 +153,16 @@ export default function AdminContacts() {
                           {contact.name}
                         </span>
                       </div>
-                      <span className="text-xs text-text-muted whitespace-nowrap">
-                        {format(new Date(contact.createdAt), "d MMM")}
-                      </span>
+                      <div className="flex items-center gap-2 flex-shrink-0">
+                        {contact.replied && (
+                          <span className="text-[10px] font-semibold px-1.5 py-0.5 rounded bg-emerald-500/10 text-emerald-400">
+                            Replied
+                          </span>
+                        )}
+                        <span className="text-xs text-text-muted whitespace-nowrap">
+                          {format(new Date(contact.createdAt), "d MMM")}
+                        </span>
+                      </div>
                     </div>
                     <p className="text-xs text-text-muted mt-1 truncate pl-5.5">
                       {contact.subject}
@@ -160,31 +194,54 @@ export default function AdminContacts() {
                     </p>
                   </div>
                   <button
-                    onClick={() =>
-                      toggleReplied(selected._id, selected.replied)
-                    }
-                    className={`text-xs font-semibold px-3 py-1.5 rounded-full whitespace-nowrap ${
+                    onClick={toggleReplied}
+                    className={`text-xs font-semibold px-3 py-1.5 rounded-full whitespace-nowrap transition-colors ${
                       selected.replied
-                        ? "bg-emerald-500/10 text-emerald-400"
-                        : "bg-amber/10 text-amber"
+                        ? "bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20"
+                        : "bg-amber-500/10 text-amber-400 hover:bg-amber-500/20"
                     }`}
                   >
-                    {selected.replied ? "Replied" : "Needs reply"}
+                    {selected.replied ? "Replied ✓" : "Needs reply"}
                   </button>
                 </div>
+
                 <div className="bg-navy rounded-lg p-5">
                   <p className="text-sm text-text-primary leading-relaxed whitespace-pre-wrap">
                     {selected.message}
                   </p>
                 </div>
-                <div className="mt-4 flex gap-2">
-                  <a
-                    href={`mailto:${selected.email}?subject=Re: ${selected.subject}`}
-                    className="inline-flex items-center gap-1.5 text-sm font-medium text-accent-blue hover:underline"
-                  >
-                    <Mail className="w-3.5 h-3.5" />
-                    Reply via email
-                  </a>
+
+                {/* Inline reply */}
+                <div className="mt-4 border-t border-white/8 pt-4">
+                  <Textarea
+                    ref={replyRef}
+                    value={replyText}
+                    onChange={(e) => setReplyText(e.target.value)}
+                    placeholder={`Reply to ${selected.name}…`}
+                    rows={3}
+                    className="resize-none"
+                  />
+                  <div className="flex items-center justify-between mt-3">
+                    <a
+                      href={`mailto:${selected.email}?subject=Re: ${selected.subject}`}
+                      className="text-xs text-text-muted hover:text-accent-blue transition-colors"
+                    >
+                      or open in email client
+                    </a>
+                    <Button
+                      onClick={sendReply}
+                      disabled={sending || !replyText.trim()}
+                      size="sm"
+                      className="font-medium"
+                    >
+                      {sending ? (
+                        <Loader2 className="w-3.5 h-3.5 mr-1 animate-spin" />
+                      ) : (
+                        <Send className="w-3.5 h-3.5 mr-1" />
+                      )}
+                      Send Reply
+                    </Button>
+                  </div>
                 </div>
               </>
             ) : (

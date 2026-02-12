@@ -56,9 +56,9 @@ export default function Hero() {
           transition={{ duration: 0.5, delay: 0.2 }}
           className="text-base text-white/60 max-w-[480px] mb-8 leading-relaxed"
         >
-          Accredited Passenger Assistance Training for taxi and private hire
-          drivers across Essex. Book a course, get your certificate, get back on
-          the road.
+          In-person Passenger Assistance Training at our Essex training centre.
+          Accredited course for taxi and private hire drivers — book a date, get
+          your certificate the same day.
         </motion.p>
 
         <motion.div
@@ -79,8 +79,8 @@ export default function Hero() {
             size="lg"
             className="bg-white/10 border-white/20 text-white hover:bg-white/[0.18] hover:border-white/40 hover:text-white font-bold"
           >
-            <Link href="#course">
-              What&apos;s Covered
+            <Link href="#pricing">
+              View Pricing
               <ArrowRight className="w-4 h-4 ml-1" />
             </Link>
           </Button>

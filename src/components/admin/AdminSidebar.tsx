@@ -10,6 +10,7 @@ import {
   MessageSquare,
   Star,
   MapPin,
+  Users,
   LogOut,
   Home,
 } from "lucide-react";
@@ -22,6 +23,7 @@ const navItems = [
   { href: "/admin/contacts", label: "Contacts", icon: MessageSquare },
   { href: "/admin/councils", label: "Councils", icon: MapPin },
   { href: "/admin/reviews", label: "Reviews", icon: Star },
+  { href: "/admin/accounts", label: "Accounts", icon: Users },
 ];
 
 export default function AdminSidebar() {

@@ -190,6 +190,29 @@ export async function sendRefundConfirmation(booking: {
   });
 }
 
+export async function sendContactReply(data: {
+  to: string;
+  toName: string;
+  subject: string;
+  replyMessage: string;
+  originalMessage: string;
+}) {
+  await sendEmail({
+    to: [{ email: data.to, name: data.toName }],
+    subject: data.subject,
+    htmlContent: emailWrapper(`
+      <h1 style="color: #38bdf8; margin-bottom: 8px;">We've replied to your enquiry</h1>
+      <p>Hi ${data.toName.split(" ")[0]},</p>
+      <p style="white-space: pre-wrap;">${data.replyMessage}</p>
+      <div style="background: #162b50; padding: 16px; border-radius: 8px; margin: 24px 0; border-left: 3px solid #38bdf8;">
+        <p style="font-size: 12px; color: #8899b0; margin: 0 0 8px;">Your original message:</p>
+        <p style="font-size: 13px; color: #c0cfe0; margin: 0; white-space: pre-wrap;">${data.originalMessage}</p>
+      </div>
+      <p style="margin-top: 30px;">Kind regards,<br/><strong>Wendy Clarke</strong><br/>Cabbie Training</p>
+    `),
+  });
+}
+
 export async function sendContactNotification(contact: {
   name: string;
   email: string;
