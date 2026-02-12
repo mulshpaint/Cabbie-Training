@@ -5,6 +5,23 @@ import dbConnect from "@/lib/mongodb";
 import Booking from "@/models/Booking";
 import Course from "@/models/Course";
 import { getStripe } from "@/lib/stripe";
+import { sendBookingCancellation, sendRefundConfirmation } from "@/lib/brevo";
+import { format } from "date-fns";
+
+async function getCourseDetails(courseId: string) {
+  const course = await Course.findById(courseId).lean();
+  if (!course) return { courseDate: "TBC", courseTime: "", courseLocation: "TBC", price: 0 };
+  const d = new Date(course.date);
+  return {
+    courseDate:
+      course.type === "flexible"
+        ? "Flexible — we'll contact you"
+        : format(d, "d MMMM yyyy"),
+    courseTime: course.type === "flexible" ? "" : format(d, "HH:mm"),
+    courseLocation: course.location,
+    price: course.price,
+  };
+}
 
 export async function PATCH(
   req: NextRequest,
@@ -20,10 +37,26 @@ export async function PATCH(
     const { id } = await params;
     const body = await req.json();
 
+    const previousBooking = await Booking.findById(id);
     const booking = await Booking.findByIdAndUpdate(id, body, { new: true });
 
     if (!booking) {
       return NextResponse.json({ error: "Booking not found" }, { status: 404 });
+    }
+
+    // Send cancellation email if status changed to cancelled
+    if (body.status === "cancelled" && previousBooking?.status !== "cancelled") {
+      try {
+        const courseDetails = await getCourseDetails(booking.courseId?.toString());
+        await sendBookingCancellation({
+          firstName: booking.firstName,
+          lastName: booking.lastName,
+          email: booking.email,
+          ...courseDetails,
+        });
+      } catch (emailError) {
+        console.error("Failed to send cancellation email:", emailError);
+      }
     }
 
     return NextResponse.json(booking);
@@ -130,6 +163,19 @@ export async function POST(
       await Course.findByIdAndUpdate(booking.courseId, {
         $inc: { spotsRemaining: 1 },
       });
+    }
+
+    // Send refund confirmation email
+    try {
+      const courseDetails = await getCourseDetails(booking.courseId?.toString());
+      await sendRefundConfirmation({
+        firstName: booking.firstName,
+        lastName: booking.lastName,
+        email: booking.email,
+        ...courseDetails,
+      });
+    } catch (emailError) {
+      console.error("Failed to send refund email:", emailError);
     }
 
     return NextResponse.json({ success: true, status: "refunded" });

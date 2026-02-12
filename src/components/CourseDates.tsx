@@ -47,22 +47,14 @@ interface BookingFormData {
   notes: string;
 }
 
-const councils = [
-  "Southend-on-Sea City Council",
-  "Chelmsford City Council",
-  "Basildon Borough Council",
-  "Thurrock Council",
-  "Castle Point Borough Council",
-  "Rochford District Council",
-  "Maldon District Council",
-  "Braintree District Council",
-  "Colchester City Council",
-  "Tendring District Council",
-  "Other (please note in comments)",
-];
+interface CouncilOption {
+  _id: string;
+  displayName: string;
+}
 
 export default function CourseDates() {
   const [courses, setCourses] = useState<Course[]>([]);
+  const [councils, setCouncils] = useState<CouncilOption[]>([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
@@ -77,18 +69,23 @@ export default function CourseDates() {
   } = useForm<BookingFormData>();
 
   useEffect(() => {
-    async function fetchCourses() {
+    async function fetchData() {
       try {
-        const res = await fetch("/api/courses");
-        const data = await res.json();
-        setCourses(Array.isArray(data) ? data : []);
+        const [coursesRes, councilsRes] = await Promise.all([
+          fetch("/api/courses"),
+          fetch("/api/councils"),
+        ]);
+        const coursesData = await coursesRes.json();
+        const councilsData = await councilsRes.json();
+        setCourses(Array.isArray(coursesData) ? coursesData : []);
+        setCouncils(Array.isArray(councilsData) ? councilsData : []);
       } catch {
-        console.error("Failed to fetch courses");
+        console.error("Failed to fetch data");
       } finally {
         setLoading(false);
       }
     }
-    fetchCourses();
+    fetchData();
   }, []);
 
   const onSubmit = async (data: BookingFormData) => {
@@ -315,10 +312,13 @@ export default function CourseDates() {
                 </SelectTrigger>
                 <SelectContent>
                   {councils.map((c) => (
-                    <SelectItem key={c} value={c}>
-                      {c}
+                    <SelectItem key={c._id} value={c.displayName}>
+                      {c.displayName}
                     </SelectItem>
                   ))}
+                  <SelectItem value="Other (please note in comments)">
+                    Other (please note in comments)
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>

@@ -9,6 +9,7 @@ import {
   ClipboardList,
   MessageSquare,
   Star,
+  MapPin,
   LogOut,
   Home,
 } from "lucide-react";
@@ -19,6 +20,7 @@ const navItems = [
   { href: "/admin/courses", label: "Courses", icon: CalendarDays },
   { href: "/admin/bookings", label: "Bookings", icon: ClipboardList },
   { href: "/admin/contacts", label: "Contacts", icon: MessageSquare },
+  { href: "/admin/councils", label: "Councils", icon: MapPin },
   { href: "/admin/reviews", label: "Reviews", icon: Star },
 ];
 

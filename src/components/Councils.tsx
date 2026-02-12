@@ -1,32 +1,37 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { MapPin, PlusCircle } from "lucide-react";
 import SectionWrapper from "./SectionWrapper";
 import Link from "next/link";
 
-const councils = [
-  "Southend-on-Sea",
-  "Chelmsford",
-  "Basildon",
-  "Thurrock",
-  "Castle Point",
-  "Rochford",
-  "Maldon",
-  "Braintree",
-  "Colchester",
-  "Tendring",
-  "Uttlesford",
-  "Epping Forest",
-  "Harlow",
-  "Brentwood",
-  "Medway",
-  "Dartford",
-  "Gravesham",
-  "Swale",
-  "London Boroughs*",
-];
+interface Council {
+  _id: string;
+  name: string;
+  displayName: string;
+  note?: string;
+}
 
 export default function Councils() {
+  const [councils, setCouncils] = useState<Council[]>([]);
+
+  useEffect(() => {
+    async function fetchCouncils() {
+      try {
+        const res = await fetch("/api/councils");
+        if (res.ok) {
+          const data = await res.json();
+          setCouncils(data);
+        }
+      } catch {
+        // Silently fail — section just won't show councils
+      }
+    }
+    fetchCouncils();
+  }, []);
+
+  const hasNotes = councils.some((c) => c.note);
+
   return (
     <SectionWrapper id="councils" className="px-[5%] py-20 bg-navy-light">
       <div className="flex justify-between items-end gap-8 flex-wrap mb-8">
@@ -47,22 +52,24 @@ export default function Councils() {
             </Link>
           </p>
         </div>
-        <div className="text-right">
-          <div className="text-5xl font-extrabold text-accent-blue leading-none tracking-tight">
-            20+
+        {councils.length > 0 && (
+          <div className="text-right">
+            <div className="text-5xl font-extrabold text-accent-blue leading-none tracking-tight">
+              {councils.length}+
+            </div>
+            <div className="text-xs text-text-muted">councils accepted</div>
           </div>
-          <div className="text-xs text-text-muted">councils accepted</div>
-        </div>
+        )}
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2.5">
         {councils.map((council) => (
           <div
-            key={council}
+            key={council._id}
             className="bg-navy-light border border-white/8 rounded-lg px-3.5 py-2.5 flex items-center gap-2 text-sm font-medium text-text-primary transition-all hover:border-accent-blue hover:text-accent-blue"
           >
             <MapPin className="w-3.5 h-3.5 text-accent-blue flex-shrink-0" />
-            {council}
+            {council.name}
           </div>
         ))}
         <div className="bg-navy-light border border-white/8 rounded-lg px-3.5 py-2.5 flex items-center gap-2 text-sm font-medium text-text-primary transition-all hover:border-accent-blue hover:text-accent-blue">
@@ -71,13 +78,18 @@ export default function Councils() {
         </div>
       </div>
 
-      <p className="mt-4 text-[0.8rem] text-text-muted italic">
-        * Selected London boroughs — confirm with your licensing authority
-        before booking.{" "}
-        <Link href="#contact" className="text-accent-blue hover:underline">
-          Ask us to check.
-        </Link>
-      </p>
+      {hasNotes && (
+        <p className="mt-4 text-[0.8rem] text-text-muted italic">
+          {councils
+            .filter((c) => c.note)
+            .map((c) => `* ${c.note}`)
+            .join(". ")}
+          .{" "}
+          <Link href="#contact" className="text-accent-blue hover:underline">
+            Ask us to check.
+          </Link>
+        </p>
+      )}
     </SectionWrapper>
   );
 }

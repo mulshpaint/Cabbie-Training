@@ -62,14 +62,23 @@ export async function POST(req: NextRequest) {
 
           if (booking && course) {
             try {
+              const courseDate =
+                course.type === "flexible"
+                  ? "Flexible — we'll contact you"
+                  : format(new Date(course.date), "d MMMM yyyy");
+              const courseTime =
+                course.type === "flexible"
+                  ? ""
+                  : format(new Date(course.date), "HH:mm");
+
               await sendBookingConfirmation({
                 firstName: booking.firstName,
                 lastName: booking.lastName,
                 email: booking.email,
-                courseDate:
-                  course.type === "flexible"
-                    ? "Flexible — we'll contact you"
-                    : format(new Date(course.date), "d MMMM yyyy"),
+                phone: booking.phone,
+                council: booking.council,
+                courseDate,
+                courseTime,
                 courseLocation: course.location,
                 price: course.price,
               });
