@@ -15,6 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Sheet,
   SheetContent,
@@ -45,6 +46,7 @@ interface BookingFormData {
   council: string;
   courseId: string;
   notes: string;
+  privacyConsent: boolean;
 }
 
 interface CouncilOption {
@@ -67,6 +69,8 @@ export default function CourseDates() {
     reset,
     formState: { errors },
   } = useForm<BookingFormData>();
+
+  register("privacyConsent", { validate: (v) => v === true || "You must agree to the Privacy Policy" });
 
   useEffect(() => {
     async function fetchData() {
@@ -331,6 +335,28 @@ export default function CourseDates() {
                 className="mt-1"
               />
             </div>
+
+            <div className="flex items-start gap-2 pt-1">
+              <Checkbox
+                id="sheet-privacy"
+                onCheckedChange={(checked) =>
+                  setValue("privacyConsent", checked === true, { shouldValidate: true })
+                }
+                className="mt-0.5"
+              />
+              <label htmlFor="sheet-privacy" className="text-xs text-text-muted leading-relaxed cursor-pointer">
+                I agree to the{" "}
+                <Link href="/privacy-policy" target="_blank" className="text-accent-blue hover:underline">
+                  Privacy Policy
+                </Link>
+                . My data will be used to process this booking and contact me about the course.
+              </label>
+            </div>
+            {errors.privacyConsent && (
+              <p className="text-red-400 text-xs">
+                {errors.privacyConsent.message}
+              </p>
+            )}
 
             <div className="flex items-center gap-4 pt-2 flex-wrap">
               <Button

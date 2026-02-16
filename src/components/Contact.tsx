@@ -14,8 +14,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Checkbox } from "@/components/ui/checkbox";
 import SectionWrapper from "./SectionWrapper";
 import { toast } from "sonner";
+import Link from "next/link";
 
 interface ContactFormData {
   name: string;
@@ -23,6 +25,7 @@ interface ContactFormData {
   phone: string;
   subject: string;
   message: string;
+  privacyConsent: boolean;
 }
 
 const contactMethods = [
@@ -55,6 +58,8 @@ export default function Contact() {
     reset,
     formState: { errors },
   } = useForm<ContactFormData>();
+
+  register("privacyConsent", { validate: (v) => v === true || "You must agree to the Privacy Policy" });
 
   const onSubmit = async (data: ContactFormData) => {
     setSubmitting(true);
@@ -198,6 +203,28 @@ export default function Contact() {
                 </p>
               )}
             </div>
+
+            <div className="flex items-start gap-2">
+              <Checkbox
+                id="contact-privacy"
+                onCheckedChange={(checked) =>
+                  setValue("privacyConsent", checked === true, { shouldValidate: true })
+                }
+                className="mt-0.5"
+              />
+              <label htmlFor="contact-privacy" className="text-xs text-text-muted leading-relaxed cursor-pointer">
+                I agree to the{" "}
+                <Link href="/privacy-policy" target="_blank" className="text-accent-blue hover:underline">
+                  Privacy Policy
+                </Link>
+                . My data will be used to respond to this enquiry.
+              </label>
+            </div>
+            {errors.privacyConsent && (
+              <p className="text-red-400 text-xs">
+                {errors.privacyConsent.message}
+              </p>
+            )}
 
             <Button
               type="submit"

@@ -9,6 +9,8 @@ const footerLinks = [
   { href: "#councils", label: "Councils" },
   { href: "#faq", label: "FAQ" },
   { href: "#contact", label: "Contact" },
+  { href: "/privacy-policy", label: "Privacy Policy" },
+  { href: "/cookie-policy", label: "Cookie Policy" },
 ];
 
 export default function Footer() {
