@@ -4,14 +4,35 @@ import { motion } from "framer-motion";
 import { ShieldCheck, Calendar, ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-
-const stats = [
-  { value: "20+", label: "Councils accepting\nour certificate" },
-  { value: "~4hrs", label: "Course duration —\npractical & focused" },
-  { value: "Same day", label: "Certificate issued\non the day" },
-];
+import { useState, useEffect } from "react";
 
 export default function Hero() {
+  const [councilCount, setCouncilCount] = useState<number | null>(null);
+
+  useEffect(() => {
+    const fetchCouncilCount = async () => {
+      try {
+        const res = await fetch("/api/councils");
+        if (res.ok) {
+          const councils = await res.json();
+          setCouncilCount(councils.length);
+        }
+      } catch (error) {
+        console.error("Failed to fetch council count:", error);
+      }
+    };
+
+    fetchCouncilCount();
+  }, []);
+
+  const stats = [
+    { 
+      value: councilCount ? `${councilCount}+` : "20+", 
+      label: "Councils accepting\nour certificate" 
+    },
+    { value: "~4hrs", label: "Course duration —\npractical & focused" },
+    { value: "Same day", label: "Certificate issued\non the day" },
+  ];
   return (
     <section
       id="hero"
