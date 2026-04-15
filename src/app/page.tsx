@@ -14,9 +14,37 @@ import Footer from "@/components/Footer";
 import ScrollToTop from "@/components/ScrollToTop";
 import { JsonLd } from "@/components/JsonLd";
 import BookingReturnToast from "@/components/BookingReturnToast";
+import HoldingPage from "@/components/HoldingPage";
+import dbConnect from "@/lib/mongodb";
+import SiteSettings from "@/models/SiteSettings";
 import { Suspense } from "react";
 
-export default function Home() {
+export default async function Home() {
+  let holdingPageEnabled = true;
+
+  try {
+    await dbConnect();
+    const settings = await SiteSettings.findOneAndUpdate(
+      { singletonKey: "global" },
+      {
+        $setOnInsert: {
+          singletonKey: "global",
+          holdingPageEnabled: true,
+        },
+      },
+      { new: true, upsert: true }
+    )
+      .select("holdingPageEnabled")
+      .lean();
+    holdingPageEnabled = Boolean(settings?.holdingPageEnabled);
+  } catch {
+    holdingPageEnabled = true;
+  }
+
+  if (holdingPageEnabled) {
+    return <HoldingPage />;
+  }
+
   return (
     <>
       <JsonLd />

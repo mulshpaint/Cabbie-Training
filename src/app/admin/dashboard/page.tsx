@@ -5,10 +5,13 @@ import AdminSidebar from "@/components/admin/AdminSidebar";
 import {
   CalendarDays,
   ClipboardList,
+  Loader2,
   MessageSquare,
+  Monitor,
   Users,
 } from "lucide-react";
 import { format } from "date-fns";
+import { Button } from "@/components/ui/button";
 
 interface Stats {
   totalBookingsThisMonth: number;
@@ -34,6 +37,9 @@ export default function AdminDashboard() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [recentBookings, setRecentBookings] = useState<RecentBooking[]>([]);
   const [loading, setLoading] = useState(true);
+  const [holdingPageEnabled, setHoldingPageEnabled] = useState(false);
+  const [holdingPageLoading, setHoldingPageLoading] = useState(true);
+  const [holdingPageSaving, setHoldingPageSaving] = useState(false);
 
   useEffect(() => {
     async function fetchData() {
@@ -54,6 +60,49 @@ export default function AdminDashboard() {
     }
     fetchData();
   }, []);
+
+  useEffect(() => {
+    async function fetchSiteSettings() {
+      try {
+        const res = await fetch("/api/admin/site-settings");
+        if (!res.ok) {
+          return;
+        }
+
+        const data = (await res.json()) as { holdingPageEnabled?: boolean };
+        setHoldingPageEnabled(Boolean(data.holdingPageEnabled));
+      } catch (error) {
+        console.error("Failed to fetch site settings:", error);
+      } finally {
+        setHoldingPageLoading(false);
+      }
+    }
+
+    fetchSiteSettings();
+  }, []);
+
+  async function toggleHoldingPageMode() {
+    setHoldingPageSaving(true);
+    try {
+      const nextValue = !holdingPageEnabled;
+      const res = await fetch("/api/admin/site-settings", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ holdingPageEnabled: nextValue }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to update holding page mode");
+      }
+
+      const data = (await res.json()) as { holdingPageEnabled?: boolean };
+      setHoldingPageEnabled(Boolean(data.holdingPageEnabled));
+    } catch (error) {
+      console.error("Failed to update holding page mode:", error);
+    } finally {
+      setHoldingPageSaving(false);
+    }
+  }
 
   const statCards = [
     {
@@ -109,6 +158,41 @@ export default function AdminDashboard() {
               </div>
             </div>
           ))}
+        </div>
+
+        <div className="bg-navy-light border border-white/8 rounded-xl p-6 shadow-lg mb-8">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <Monitor className="w-4 h-4 text-accent-blue" />
+                <h2 className="text-lg font-bold text-white">Holding Page Mode</h2>
+              </div>
+              <p className="text-sm text-text-muted">
+                When enabled, the public homepage shows only your contact details.
+              </p>
+              <p className="text-xs mt-2">
+                <span
+                  className={holdingPageEnabled ? "text-amber" : "text-emerald-400"}
+                >
+                  {holdingPageLoading
+                    ? "Loading status..."
+                    : holdingPageEnabled
+                      ? "Currently ON"
+                      : "Currently OFF"}
+                </span>
+              </p>
+            </div>
+
+            <Button
+              onClick={toggleHoldingPageMode}
+              disabled={holdingPageLoading || holdingPageSaving}
+              variant={holdingPageEnabled ? "destructive" : "default"}
+              className="font-semibold"
+            >
+              {holdingPageSaving ? <Loader2 className="w-4 h-4 mr-1 animate-spin" /> : null}
+              {holdingPageEnabled ? "Disable Holding Page" : "Enable Holding Page"}
+            </Button>
+          </div>
         </div>
 
         <div className="bg-navy-light border border-white/8 rounded-xl shadow-lg">
