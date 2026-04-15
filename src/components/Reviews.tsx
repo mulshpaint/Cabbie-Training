@@ -66,7 +66,8 @@ export default function Reviews() {
   }, []);
 
   return (
-    <SectionWrapper className="px-[5%] py-20">
+    <SectionWrapper className="py-20">
+      <div className="max-w-7xl mx-auto px-[5%]">
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -165,6 +166,7 @@ export default function Reviews() {
           </a>
         </div>
       )}
+      </div>
     </SectionWrapper>
   );
 }

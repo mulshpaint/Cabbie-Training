@@ -13,6 +13,79 @@ interface Council {
   note?: string;
 }
 
+const fallbackCouncils: Council[] = [
+  {
+    _id: "fallback-southend",
+    name: "Southend-on-Sea",
+    displayName: "Southend-on-Sea City Council",
+  },
+  {
+    _id: "fallback-castle-point",
+    name: "Castle Point",
+    displayName: "Castle Point Borough Council",
+  },
+  {
+    _id: "fallback-rochford",
+    name: "Rochford",
+    displayName: "Rochford District Council",
+  },
+  {
+    _id: "fallback-basildon",
+    name: "Basildon",
+    displayName: "Basildon Borough Council",
+  },
+  {
+    _id: "fallback-manchester",
+    name: "Manchester",
+    displayName: "Manchester City Council",
+  },
+  {
+    _id: "fallback-leeds",
+    name: "Leeds",
+    displayName: "Leeds City Council",
+  },
+  {
+    _id: "fallback-wigan",
+    name: "Wigan",
+    displayName: "Wigan Council",
+  },
+  {
+    _id: "fallback-sheffield",
+    name: "Sheffield",
+    displayName: "Sheffield City Council",
+  },
+  {
+    _id: "fallback-rotherham",
+    name: "Rotherham",
+    displayName: "Rotherham Metropolitan Borough Council",
+  },
+  {
+    _id: "fallback-hounslow",
+    name: "Hounslow",
+    displayName: "London Borough of Hounslow",
+  },
+  {
+    _id: "fallback-calderdale",
+    name: "Calderdale",
+    displayName: "Calderdale Council",
+  },
+  {
+    _id: "fallback-derbyshire",
+    name: "Derbyshire",
+    displayName: "Derbyshire County Council",
+  },
+  {
+    _id: "fallback-north-lincolnshire",
+    name: "North Lincolnshire",
+    displayName: "North Lincolnshire Council",
+  },
+  {
+    _id: "fallback-sefton",
+    name: "Sefton",
+    displayName: "Sefton Council",
+  },
+];
+
 export default function Councils() {
   const [councils, setCouncils] = useState<Council[]>([]);
 
@@ -31,10 +104,12 @@ export default function Councils() {
     fetchCouncils();
   }, []);
 
-  const hasNotes = councils.some((c) => c.note);
+  const displayedCouncils = councils.length > 0 ? councils : fallbackCouncils;
+  const hasNotes = displayedCouncils.some((c) => c.note);
 
   return (
-    <SectionWrapper id="councils" className="px-[5%] py-20 bg-navy-light">
+    <SectionWrapper id="councils" className="py-20 bg-navy-light">
+      <div className="max-w-7xl mx-auto px-[5%]">
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -59,10 +134,10 @@ export default function Councils() {
             </Link>
           </p>
         </div>
-        {councils.length > 0 && (
+        {displayedCouncils.length > 0 && (
           <div className="text-right">
             <div className="text-5xl font-extrabold text-accent-blue leading-none tracking-tight">
-              {councils.length}+
+              {displayedCouncils.length}+
             </div>
             <div className="text-xs text-text-muted">councils accepted</div>
           </div>
@@ -70,7 +145,7 @@ export default function Councils() {
       </motion.div>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2.5">
-        {councils.map((council) => (
+        {displayedCouncils.map((council) => (
           <div
             key={council._id}
             className="bg-navy border border-white/8 rounded-lg px-3.5 py-2.5 flex items-center gap-2 text-sm font-medium text-text-primary transition-all hover:border-accent-blue/60 hover:text-accent-blue hover:bg-accent-blue/5 hover:shadow-md hover:shadow-accent-blue/10"
@@ -87,7 +162,7 @@ export default function Councils() {
 
       {hasNotes && (
         <p className="mt-4 text-[0.8rem] text-text-muted italic">
-          {councils
+          {displayedCouncils
             .filter((c) => c.note)
             .map((c) => `* ${c.note}`)
             .join(". ")}
@@ -97,6 +172,7 @@ export default function Councils() {
           </Link>
         </p>
       )}
+      </div>
     </SectionWrapper>
   );
 }

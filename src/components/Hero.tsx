@@ -37,7 +37,7 @@ export default function Hero() {
   return (
     <section
       id="hero"
-      className="relative bg-navy pt-28 pb-20 px-[5%] overflow-hidden"
+      className="relative bg-navy pt-28 pb-20 overflow-hidden"
     >
       {/* Background effects */}
       <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_60%_70%_at_80%_50%,rgba(14,165,233,0.08)_0%,transparent_65%)]" />
@@ -50,7 +50,7 @@ export default function Hero() {
         }}
       />
 
-      <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-12 items-center max-w-6xl">
+      <div className="relative z-10 grid grid-cols-1 lg:grid-cols-[1fr_auto] gap-12 items-center max-w-7xl mx-auto w-full px-[5%]">
         {/* Left — content */}
         <div>
           <motion.div
@@ -80,9 +80,10 @@ export default function Hero() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-base text-white/60 max-w-[480px] mb-8 leading-relaxed"
           >
-            In-person Passenger Assistance Training at our Essex training centre.
-            Accredited course for taxi and private hire drivers — book a date, get
-            your certificate the same day.
+            In-person, hands-on Passenger Assistance Training at our Essex training 
+            centre. Face-to-face instruction for practical skills like wheelchair 
+            handling and safe securing—essential techniques that can&apos;t be taught 
+            online. Book a date, get your accredited certificate the same day.
           </motion.p>
 
           <motion.div

@@ -4,7 +4,7 @@ export function JsonLd() {
     "@type": "LocalBusiness",
     name: "Cabbie Training",
     description:
-      "Accredited Passenger Assistance Training (PAT) for taxi and private hire drivers across Essex.",
+      "Accredited Passenger Assistance Training (PAT) for taxi and private hire drivers. In-person, hands-on training delivered in partnership with Total Training UK. RoSPA assured driver training element.",
     url: "https://cabbietraining.co.uk",
     telephone: "07739320050",
     email: "info@cabbietraining.co.uk",
@@ -20,6 +20,13 @@ export function JsonLd() {
       "@type": "GeoCoordinates",
       latitude: 51.5819,
       longitude: 0.7073,
+    },
+    founder: {
+      "@type": "Person",
+      name: "Wendy Clarke",
+      jobTitle: "Lead PAT Instructor",
+      description:
+        "Licensed taxi driver since 2000 with 16 years as a disability driver. Delivering Disability Awareness and Passenger Assistance Training since 2012.",
     },
     openingHours: "Mo-Sa 08:00-18:00",
     priceRange: "£65-£75",

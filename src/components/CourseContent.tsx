@@ -50,7 +50,8 @@ const modules = [
 
 export default function CourseContent() {
   return (
-    <SectionWrapper id="course" className="px-[5%] py-20">
+    <SectionWrapper id="course" className="py-20">
+      <div className="max-w-7xl mx-auto px-[5%]">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-start">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
@@ -65,8 +66,10 @@ export default function CourseContent() {
             What&apos;s covered
           </h2>
           <p className="text-text-muted text-[0.975rem] leading-relaxed max-w-[520px] mb-6">
-            Everything your council needs, delivered in around 4 hours.
-            Practical and focused — no unnecessary filler.
+            Everything your council needs, delivered in around 4 hours of 
+            in-person, hands-on training. Face-to-face instruction ensures you 
+            master practical skills like wheelchair handling and safe securing 
+            that simply can&apos;t be taught effectively online.
           </p>
           <Button asChild className="font-bold">
             <Link href="#booking">
@@ -117,7 +120,25 @@ export default function CourseContent() {
               </span>
             </div>
           </div>
+
+          <div className="mt-4 bg-accent-blue/5 border border-accent-blue/20 rounded-xl px-5 py-4">
+            <div className="flex items-start gap-3.5">
+              <Hand className="w-5 h-5 text-accent-blue flex-shrink-0 mt-0.5" />
+              <div>
+                <strong className="block text-sm font-bold text-white mb-1">
+                  Why In-Person Training Matters
+                </strong>
+                <p className="text-xs text-text-muted leading-relaxed">
+                  Wheelchair handling, safe tie-down procedures, and passenger assistance 
+                  require hands-on practice. These essential skills simply cannot be 
+                  taught effectively through online courses—you need real equipment and 
+                  expert guidance to build confidence and competence.
+                </p>
+              </div>
+            </div>
+          </div>
         </motion.div>
+      </div>
       </div>
     </SectionWrapper>
   );

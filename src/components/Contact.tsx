@@ -85,7 +85,8 @@ export default function Contact() {
   };
 
   return (
-    <SectionWrapper id="contact" className="px-[5%] py-20">
+    <SectionWrapper id="contact" className="py-20">
+      <div className="max-w-7xl mx-auto px-[5%]">
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.4fr] gap-12 items-start">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
@@ -253,6 +254,7 @@ export default function Contact() {
             </Button>
           </form>
         </motion.div>
+      </div>
       </div>
     </SectionWrapper>
   );

@@ -62,9 +62,22 @@ const AdminSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+const CouncilSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true, unique: true },
+    displayName: { type: String, required: true },
+    note: { type: String },
+    active: { type: Boolean, default: true },
+    order: { type: Number, default: 0 },
+  },
+  { timestamps: true }
+);
+
 const Course =
   mongoose.models.Course || mongoose.model("Course", CourseSchema);
 const Admin = mongoose.models.Admin || mongoose.model("Admin", AdminSchema);
+const Council =
+  mongoose.models.Council || mongoose.model("Council", CouncilSchema);
 
 async function seed() {
   console.log("Connecting to MongoDB...");
@@ -153,6 +166,30 @@ async function seed() {
   console.log("  Email:    info@cabbietraining.co.uk");
   console.log(`  Password: ${tempPassword}`);
   console.log("  (Change this password after first login!)\n");
+
+  // Seed councils
+  console.log("Seeding councils...");
+  await Council.deleteMany({});
+
+  const councils = [
+    { name: "Southend-on-Sea", displayName: "Southend-on-Sea City Council", order: 1 },
+    { name: "Castle Point", displayName: "Castle Point Borough Council", order: 2 },
+    { name: "Rochford", displayName: "Rochford District Council", order: 3 },
+    { name: "Basildon", displayName: "Basildon Borough Council", order: 4 },
+    { name: "Manchester", displayName: "Manchester City Council", order: 5 },
+    { name: "Leeds", displayName: "Leeds City Council", order: 6 },
+    { name: "Wigan", displayName: "Wigan Council", order: 7 },
+    { name: "Sheffield", displayName: "Sheffield City Council", order: 8 },
+    { name: "Rotherham", displayName: "Rotherham Metropolitan Borough Council", order: 9 },
+    { name: "Hounslow", displayName: "London Borough of Hounslow", order: 10 },
+    { name: "Calderdale", displayName: "Calderdale Council", order: 11 },
+    { name: "Derbyshire", displayName: "Derbyshire County Council", order: 12 },
+    { name: "North Lincolnshire", displayName: "North Lincolnshire Council", order: 13 },
+    { name: "Sefton", displayName: "Sefton Council", order: 14 },
+  ];
+
+  await Council.insertMany(councils);
+  console.log(`  Created ${councils.length} councils\n`);
 
   console.log("Seed complete!");
   await mongoose.disconnect();

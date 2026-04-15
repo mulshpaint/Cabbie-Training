@@ -15,7 +15,8 @@ const footerLinks = [
 
 export default function Footer() {
   return (
-    <footer className="bg-navy border-t border-white/8 px-[5%] pt-10 pb-6">
+    <footer className="bg-navy border-t border-white/8 pt-10 pb-6">
+      <div className="max-w-7xl mx-auto w-full px-[5%]">
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-8 mb-8">
         {/* Brand */}
         <div>
@@ -66,6 +67,7 @@ export default function Footer() {
         <p className="text-white/25 text-xs">
           © {new Date().getFullYear()} Cabbie Training · Rochford, Essex · All rights reserved
         </p>
+      </div>
       </div>
     </footer>
   );

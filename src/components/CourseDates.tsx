@@ -132,7 +132,8 @@ export default function CourseDates() {
   };
 
   return (
-    <SectionWrapper id="booking" className="px-[5%] py-20 scroll-mt-16">
+    <SectionWrapper id="booking" className="py-20 scroll-mt-16">
+      <div className="max-w-7xl mx-auto px-[5%]">
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -416,6 +417,7 @@ export default function CourseDates() {
           </form>
         </SheetContent>
       </Sheet>
+      </div>
     </SectionWrapper>
   );
 }

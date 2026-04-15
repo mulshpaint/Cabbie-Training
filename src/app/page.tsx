@@ -4,6 +4,7 @@ import TrustStrip from "@/components/TrustStrip";
 import CourseDates from "@/components/CourseDates";
 import Pricing from "@/components/Pricing";
 import CourseContent from "@/components/CourseContent";
+import Accreditation from "@/components/Accreditation";
 import About from "@/components/About";
 import Councils from "@/components/Councils";
 import Reviews from "@/components/Reviews";
@@ -28,6 +29,7 @@ export default function Home() {
       <CourseDates />
       <Pricing />
       <CourseContent />
+      <Accreditation />
       <About />
       <Councils />
       <Reviews />

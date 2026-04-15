@@ -44,7 +44,8 @@ const faqs = [
 
 export default function FAQ() {
   return (
-    <SectionWrapper id="faq" className="px-[5%] py-20 bg-navy-light">
+    <SectionWrapper id="faq" className="py-20 bg-navy-light">
+      <div className="max-w-7xl mx-auto px-[5%]">
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -80,6 +81,7 @@ export default function FAQ() {
             </AccordionItem>
           ))}
         </Accordion>
+      </div>
       </div>
     </SectionWrapper>
   );

@@ -27,7 +27,8 @@ const items = [
 
 export default function TrustStrip() {
   return (
-    <div className="bg-navy-light border-y border-white/8 px-[5%] py-3.5">
+    <div className="bg-navy-light border-y border-white/8 py-3.5">
+      <div className="max-w-7xl mx-auto px-[5%]">
       <div className="flex items-center justify-center gap-6 flex-wrap">
         {items.map((item, i) => (
           <div key={i} className="flex items-center gap-1.5 text-xs font-semibold text-text-muted">
@@ -40,6 +41,7 @@ export default function TrustStrip() {
             )}
           </div>
         ))}
+      </div>
       </div>
     </div>
   );
