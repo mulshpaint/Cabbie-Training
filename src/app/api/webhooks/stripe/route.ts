@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
             status: "paid",
             stripeSessionId: session.id,
           },
-          { new: true }
+          { returnDocument: "after" }
         );
 
         // If booking is already marked paid, do not decrement spots or re-send emails.

@@ -61,7 +61,7 @@ export async function getReviews(): Promise<IReview[]> {
       await ReviewCache.findOneAndUpdate(
         { placeId },
         { reviews: freshReviews, fetchedAt: new Date() },
-        { upsert: true, new: true }
+        { upsert: true, returnDocument: "after" }
       );
       return freshReviews.filter((r) => r.visible);
     }
@@ -84,7 +84,7 @@ export async function forceRefreshReviews(): Promise<IReview[]> {
   await ReviewCache.findOneAndUpdate(
     { placeId },
     { reviews, fetchedAt: new Date() },
-    { upsert: true, new: true }
+    { upsert: true, returnDocument: "after" }
   );
 
   return reviews;

@@ -8,7 +8,7 @@ async function getOrCreateGlobalSettings() {
   const settings = await SiteSettings.findOneAndUpdate(
     { singletonKey: "global" },
     { $setOnInsert: { singletonKey: "global", holdingPageEnabled: false } },
-    { new: true, upsert: true }
+    { returnDocument: "after", upsert: true }
   ).lean();
 
   return settings;
@@ -59,7 +59,7 @@ export async function PATCH(req: NextRequest) {
         $set: { holdingPageEnabled: body.holdingPageEnabled },
         $setOnInsert: { singletonKey: "global" },
       },
-      { new: true, upsert: true }
+      { returnDocument: "after", upsert: true }
     ).lean();
 
     return NextResponse.json({

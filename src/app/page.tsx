@@ -32,7 +32,7 @@ export default async function Home() {
           holdingPageEnabled: true,
         },
       },
-      { new: true, upsert: true }
+      { returnDocument: "after", upsert: true }
     )
       .select("holdingPageEnabled")
       .lean();
