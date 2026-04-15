@@ -3,6 +3,7 @@
 import { useForm } from "react-hook-form";
 import { useState } from "react";
 import { Phone, Mail, MapPin, Send, Loader2 } from "lucide-react";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -86,7 +87,12 @@ export default function Contact() {
   return (
     <SectionWrapper id="contact" className="px-[5%] py-20">
       <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.4fr] gap-12 items-start">
-        <div>
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
           <div className="text-xs font-bold tracking-[2px] uppercase text-accent-blue mb-2">
             Get in Touch
           </div>
@@ -122,9 +128,15 @@ export default function Contact() {
               );
             })}
           </div>
-        </div>
+        </motion.div>
 
-        <div className="bg-navy-light border border-white/8 rounded-2xl p-6 md:p-8 shadow-lg">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.15 }}
+          className="bg-navy-light border border-white/8 rounded-2xl p-6 md:p-8 shadow-lg"
+        >
           <h3 className="text-lg font-extrabold text-white mb-5">
             Send a message
           </h3>
@@ -240,7 +252,7 @@ export default function Contact() {
               Send Message
             </Button>
           </form>
-        </div>
+        </motion.div>
       </div>
     </SectionWrapper>
   );

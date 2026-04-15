@@ -7,6 +7,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import SectionWrapper from "./SectionWrapper";
+import { motion } from "framer-motion";
 
 const faqs = [
   {
@@ -27,7 +28,7 @@ const faqs = [
   {
     question: "Can I pick my own date?",
     answer:
-      'Yes. Our flexible option (£75) lets you request any date that suits. Select "Flexible Date" when you book.',
+      'Yes. Our flexible option (£95) lets you request any date that suits. Select "Flexible Date" when you book.',
   },
   {
     question: "What do I need to bring?",
@@ -44,7 +45,13 @@ const faqs = [
 export default function FAQ() {
   return (
     <SectionWrapper id="faq" className="px-[5%] py-20 bg-navy-light">
-      <div className="text-center">
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5 }}
+        className="text-center"
+      >
         <div className="text-xs font-bold tracking-[2px] uppercase text-accent-blue mb-2">
           FAQ
         </div>
@@ -54,7 +61,7 @@ export default function FAQ() {
         <p className="text-text-muted text-[0.975rem] leading-relaxed max-w-[520px] mx-auto mb-10">
           Quick answers before you book.
         </p>
-      </div>
+      </motion.div>
 
       <div className="max-w-[720px] mx-auto">
         <Accordion type="single" collapsible className="w-full">

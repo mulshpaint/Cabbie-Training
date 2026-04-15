@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { Menu, X, Settings } from "lucide-react";
+import { Menu, X, Settings, ShieldCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 
@@ -39,8 +39,9 @@ export default function Navbar() {
     >
       <Link
         href="#hero"
-        className="text-lg font-extrabold text-white tracking-tight"
+        className="flex items-center gap-1.5 text-lg font-extrabold text-white tracking-tight"
       >
+        <ShieldCheck className="w-5 h-5 text-accent-blue" />
         Cabbie<span className="text-accent-blue">Training</span>
       </Link>
 

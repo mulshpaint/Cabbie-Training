@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import SectionWrapper from "./SectionWrapper";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 const modules = [
   {
@@ -51,7 +52,12 @@ export default function CourseContent() {
   return (
     <SectionWrapper id="course" className="px-[5%] py-20">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-14 items-start">
-        <div>
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+        >
           <div className="text-xs font-bold tracking-[2px] uppercase text-accent-blue mb-2">
             The Course
           </div>
@@ -68,9 +74,14 @@ export default function CourseContent() {
               Book Your Place
             </Link>
           </Button>
-        </div>
+        </motion.div>
 
-        <div>
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.15 }}
+        >
           <div className="border border-white/8 rounded-2xl overflow-hidden shadow-lg">
             <div className="bg-navy px-6 py-4 text-[0.68rem] font-bold tracking-widest uppercase text-white/60">
               Course Overview
@@ -106,7 +117,7 @@ export default function CourseContent() {
               </span>
             </div>
           </div>
-        </div>
+        </motion.div>
       </div>
     </SectionWrapper>
   );

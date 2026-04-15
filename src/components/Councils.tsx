@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { MapPin, PlusCircle } from "lucide-react";
+import { CheckCircle2, PlusCircle } from "lucide-react";
 import SectionWrapper from "./SectionWrapper";
 import Link from "next/link";
+import { motion } from "framer-motion";
 
 interface Council {
   _id: string;
@@ -34,7 +35,13 @@ export default function Councils() {
 
   return (
     <SectionWrapper id="councils" className="px-[5%] py-20 bg-navy-light">
-      <div className="flex justify-between items-end gap-8 flex-wrap mb-8">
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5 }}
+        className="flex justify-between items-end gap-8 flex-wrap mb-8"
+      >
         <div>
           <div className="text-xs font-bold tracking-[2px] uppercase text-accent-blue mb-2">
             Accepted By
@@ -60,19 +67,19 @@ export default function Councils() {
             <div className="text-xs text-text-muted">councils accepted</div>
           </div>
         )}
-      </div>
+      </motion.div>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2.5">
         {councils.map((council) => (
           <div
             key={council._id}
-            className="bg-navy-light border border-white/8 rounded-lg px-3.5 py-2.5 flex items-center gap-2 text-sm font-medium text-text-primary transition-all hover:border-accent-blue hover:text-accent-blue"
+            className="bg-navy border border-white/8 rounded-lg px-3.5 py-2.5 flex items-center gap-2 text-sm font-medium text-text-primary transition-all hover:border-accent-blue/60 hover:text-accent-blue hover:bg-accent-blue/5 hover:shadow-md hover:shadow-accent-blue/10"
           >
-            <MapPin className="w-3.5 h-3.5 text-accent-blue flex-shrink-0" />
+            <CheckCircle2 className="w-3.5 h-3.5 text-accent-blue flex-shrink-0" />
             {council.name}
           </div>
         ))}
-        <div className="bg-navy-light border border-white/8 rounded-lg px-3.5 py-2.5 flex items-center gap-2 text-sm font-medium text-text-primary transition-all hover:border-accent-blue hover:text-accent-blue">
+        <div className="bg-navy border border-dashed border-white/15 rounded-lg px-3.5 py-2.5 flex items-center gap-2 text-sm font-medium text-text-muted transition-all hover:border-accent-blue/60 hover:text-accent-blue">
           <PlusCircle className="w-3.5 h-3.5 text-accent-blue flex-shrink-0" />
           + More
         </div>

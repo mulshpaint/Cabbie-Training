@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Star, ExternalLink } from "lucide-react";
 import SectionWrapper from "./SectionWrapper";
+import { motion } from "framer-motion";
 
 interface Review {
   authorName: string;
@@ -66,6 +67,12 @@ export default function Reviews() {
 
   return (
     <SectionWrapper className="px-[5%] py-20">
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5 }}
+      >
       <div className="text-xs font-bold tracking-[2px] uppercase text-accent-blue mb-2">
         What Drivers Say
       </div>
@@ -76,13 +83,32 @@ export default function Reviews() {
         Real feedback from taxi and private hire drivers who&apos;ve completed
         their PAT course with us.
       </p>
+      </motion.div>
+
+      {/* Aggregate rating */}
+      <div className="inline-flex items-center gap-4 bg-navy-light border border-white/8 rounded-2xl px-6 py-4 mb-8">
+        <div className="text-5xl font-extrabold text-white leading-none">5.0</div>
+        <div>
+          <div className="flex gap-0.5 mb-1">
+            {Array.from({ length: 5 }).map((_, i) => (
+              <Star key={i} className="w-4 h-4 text-amber fill-amber" />
+            ))}
+          </div>
+          <div className="text-xs text-text-muted">Based on driver reviews</div>
+        </div>
+        <div className="ml-4 pl-4 border-l border-white/8">
+          <div className="text-xs text-text-muted">All courses</div>
+          <div className="text-sm font-bold text-white">Essex trained</div>
+        </div>
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {reviews.slice(0, 6).map((review, i) => (
           <div
             key={i}
-            className="bg-navy-light border border-white/8 rounded-xl p-6 shadow-lg transition-all hover:border-accent-blue/40 hover:-translate-y-0.5 hover:shadow-xl"
+            className="relative bg-navy-light border border-white/8 rounded-xl p-6 shadow-lg transition-all hover:border-accent-blue/40 hover:-translate-y-0.5 hover:shadow-xl overflow-hidden"
           >
+            <div className="absolute top-3 right-4 text-6xl font-serif text-accent-blue/10 leading-none select-none pointer-events-none">&rdquo;</div>
             <div className="flex gap-0.5 mb-3">
               {Array.from({ length: 5 }).map((_, j) => (
                 <Star
@@ -95,7 +121,7 @@ export default function Reviews() {
                 />
               ))}
             </div>
-            <p className="text-text-muted text-sm leading-relaxed mb-4 italic">
+            <p className="text-text-muted text-sm leading-relaxed mb-4 italic relative z-10">
               &ldquo;{review.text}&rdquo;
             </p>
             <div className="flex items-center gap-3">

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { Lock, Send, Loader2, CalendarDays } from "lucide-react";
+import { Lock, Send, Loader2, CalendarDays, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -24,6 +24,7 @@ import {
   SheetDescription,
 } from "@/components/ui/sheet";
 import SectionWrapper from "./SectionWrapper";
+import { motion } from "framer-motion";
 import { toast } from "sonner";
 import { format } from "date-fns";
 import Link from "next/link";
@@ -132,6 +133,12 @@ export default function CourseDates() {
 
   return (
     <SectionWrapper id="booking" className="px-[5%] py-20 scroll-mt-16">
+      <motion.div
+        initial={{ opacity: 0, y: 24 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5 }}
+      >
       <div className="text-xs font-bold tracking-[2px] uppercase text-accent-blue mb-2">
         Upcoming Courses
       </div>
@@ -144,6 +151,7 @@ export default function CourseDates() {
           Get in touch.
         </Link>
       </p>
+      </motion.div>
 
       {/* Course Date Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -151,57 +159,85 @@ export default function CourseDates() {
           ? Array.from({ length: 4 }).map((_, i) => (
               <div
                 key={i}
-                className="bg-navy-light border border-white/8 rounded-xl p-5 animate-pulse h-24"
+                className="bg-navy-light border border-white/8 rounded-xl p-5 animate-pulse h-28"
               />
             ))
           : courses.map((course) => (
               <div
                 key={course._id}
-                className={`bg-navy-light border rounded-xl p-5 flex justify-between items-center gap-4 transition-all hover:border-accent-blue hover:shadow-lg hover:shadow-accent-blue/10 ${
+                className={`bg-navy-light border rounded-xl p-5 flex justify-between items-start gap-4 transition-all hover:border-accent-blue hover:shadow-lg hover:shadow-accent-blue/10 group ${
                   course.type === "flexible"
-                    ? "border-dashed border-white/15"
+                    ? "border-dashed border-white/20"
                     : "border-white/8"
                 }`}
               >
-                <div>
-                  <div className="text-[0.65rem] font-bold tracking-widest uppercase text-accent-blue">
-                    {course.type === "flexible"
-                      ? "Flexible Date"
-                      : format(new Date(course.date), "MMMM yyyy")}
-                  </div>
-                  <div className="text-2xl font-extrabold text-white leading-none tracking-tight my-0.5">
-                    {course.type === "flexible"
-                      ? "Your Date"
-                      : format(new Date(course.date), "d")}
-                  </div>
-                  <div className="text-xs text-text-muted">
-                    {course.type !== "flexible" && (
-                      <span className="text-white/60">
-                        {format(new Date(course.date), "HH:mm")} &middot;{" "}
-                      </span>
-                    )}
-                    {course.location}
+                {/* Left — date display */}
+                <div className="flex gap-4 items-start">
+                  {course.type !== "flexible" ? (
+                    <div className="bg-navy rounded-xl px-3 py-2 text-center min-w-[52px]">
+                      <div className="text-[0.55rem] font-bold tracking-widest uppercase text-accent-blue">
+                        {format(new Date(course.date), "MMM")}
+                      </div>
+                      <div className="text-2xl font-extrabold text-white leading-none">
+                        {format(new Date(course.date), "d")}
+                      </div>
+                      <div className="text-[0.55rem] text-text-muted uppercase tracking-wide">
+                        {format(new Date(course.date), "EEE")}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="bg-navy rounded-xl px-3 py-2 text-center min-w-[52px]">
+                      <div className="text-[0.55rem] font-bold tracking-widest uppercase text-accent-blue">
+                        Any
+                      </div>
+                      <div className="text-lg font-extrabold text-white leading-none py-0.5">
+                        Date
+                      </div>
+                      <div className="text-[0.55rem] text-text-muted uppercase tracking-wide">
+                        Flex
+                      </div>
+                    </div>
+                  )}
+                  <div className="pt-0.5">
+                    <div className="text-sm font-bold text-white mb-0.5">
+                      {course.type === "flexible"
+                        ? "Flexible Date"
+                        : format(new Date(course.date), "HH:mm")}
+                    </div>
+                    <div className="text-xs text-text-muted mb-2">
+                      {course.location}
+                    </div>
+                    <Badge
+                      variant="outline"
+                      className={
+                        course.type === "flexible"
+                          ? "bg-accent-blue/10 text-accent-blue border-accent-blue/30 text-xs"
+                          : course.spotsRemaining <= 3
+                          ? "bg-amber/10 text-amber border-amber/30 text-xs"
+                          : "bg-emerald-500/10 text-emerald-500 border-emerald-500/30 text-xs"
+                      }
+                    >
+                      {course.type === "flexible"
+                        ? "Available"
+                        : `${course.spotsRemaining} spot${course.spotsRemaining !== 1 ? "s" : ""} left`}
+                    </Badge>
                   </div>
                 </div>
-                <div className="flex flex-col items-end gap-2">
-                  <Badge
-                    variant="outline"
-                    className={
-                      course.spotsRemaining <= 3
-                        ? "bg-amber/10 text-amber border-amber/30 text-xs"
-                        : "bg-emerald-500/10 text-emerald-500 border-emerald-500/30 text-xs"
-                    }
-                  >
-                    {course.type === "flexible"
-                      ? "Available"
-                      : `${course.spotsRemaining} spots left`}
-                  </Badge>
-                  <button
+
+                {/* Right — price + CTA */}
+                <div className="flex flex-col items-end gap-2 shrink-0">
+                  <div className="text-right">
+                    <div className="text-lg font-extrabold text-white">£{course.price}</div>
+                    <div className="text-[0.6rem] text-text-muted">per person</div>
+                  </div>
+                  <Button
+                    size="sm"
                     onClick={() => openBookingSheet(course)}
-                    className="text-xs font-bold px-3 py-1.5 rounded-md bg-navy text-white hover:bg-navy-lighter transition-colors whitespace-nowrap"
+                    className="font-bold text-xs group-hover:shadow-lg group-hover:shadow-accent-blue/20 transition-all"
                   >
-                    {course.type === "flexible" ? "Request →" : "Book →"}
-                  </button>
+                    {course.type === "flexible" ? "Request" : "Book"}
+                    <ChevronRight className="w-3 h-3 ml-0.5" />
+                  </Button>
                 </div>
               </div>
             ))}

@@ -1,5 +1,6 @@
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
+import TrustStrip from "@/components/TrustStrip";
 import CourseDates from "@/components/CourseDates";
 import Pricing from "@/components/Pricing";
 import CourseContent from "@/components/CourseContent";
@@ -23,6 +24,7 @@ export default function Home() {
       </Suspense>
       <Navbar />
       <Hero />
+      <TrustStrip />
       <CourseDates />
       <Pricing />
       <CourseContent />
