@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "@/lib/auth";
 import dbConnect from "@/lib/mongodb";
 import SiteSettings from "@/models/SiteSettings";
+import { revalidatePath } from "next/cache";
 
 async function getOrCreateGlobalSettings() {
   const settings = await SiteSettings.findOneAndUpdate(
@@ -61,6 +62,8 @@ export async function PATCH(req: NextRequest) {
       },
       { returnDocument: "after", upsert: true }
     ).lean();
+
+    revalidatePath("/");
 
     return NextResponse.json({
       holdingPageEnabled: Boolean(updated?.holdingPageEnabled),

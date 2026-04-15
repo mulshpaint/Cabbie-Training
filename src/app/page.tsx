@@ -19,6 +19,8 @@ import dbConnect from "@/lib/mongodb";
 import SiteSettings from "@/models/SiteSettings";
 import { Suspense } from "react";
 
+export const dynamic = "force-dynamic";
+
 export default async function Home() {
   let holdingPageEnabled = true;
 
@@ -29,7 +31,7 @@ export default async function Home() {
       {
         $setOnInsert: {
           singletonKey: "global",
-          holdingPageEnabled: true,
+          holdingPageEnabled: false,
         },
       },
       { returnDocument: "after", upsert: true }
