@@ -1,8 +1,9 @@
 "use client";
 
-import { ShieldCheck, Award, CheckCircle2, GraduationCap } from "lucide-react";
+import { Award, CheckCircle2, GraduationCap, ShieldCheck } from "lucide-react";
 import SectionWrapper from "./SectionWrapper";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 const credentials = [
   {
@@ -74,23 +75,38 @@ export default function Accreditation() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.3 }}
-          className="bg-accent-blue/5 border border-accent-blue/20 rounded-2xl p-8"
+          className="bg-accent-blue/5 border border-accent-blue/20 rounded-2xl overflow-hidden"
         >
-          <div className="flex flex-col md:flex-row items-start md:items-center gap-6">
-            <div className="w-14 h-14 min-w-[56px] bg-accent-blue/15 rounded-xl flex items-center justify-center">
-              <CheckCircle2 className="w-7 h-7 text-accent-blue" />
+          {/* Partner header strip */}
+          <div className="flex flex-col sm:flex-row items-center sm:items-stretch border-b border-accent-blue/15">
+            <div className="flex items-center justify-center px-8 py-5 bg-white/[0.03] border-b sm:border-b-0 sm:border-r border-accent-blue/15 min-w-[220px]">
+              <div className="flex flex-col items-center gap-2">
+                <p className="text-white/40 text-[0.6rem] font-bold tracking-[0.15em] uppercase">
+                  Official Training Partner
+                </p>
+                <Image
+                  src="/total training uk.svg"
+                  alt="Total Training UK"
+                  width={150}
+                  height={50}
+                  className="brightness-0 invert opacity-80"
+                />
+              </div>
             </div>
-            <div className="flex-1">
-              <h3 className="text-xl font-bold text-white mb-2">
-                Why accreditation matters
-              </h3>
-              <p className="text-text-muted text-sm leading-relaxed">
-                Our accredited training ensures your certificate is recognized by councils 
-                across the UK. The programme has been enhanced to provide more comprehensive 
-                coverage of disability awareness than standard courses, and the RoSPA assurance 
-                on the driver training element gives you confidence that you&apos;re receiving 
-                quality, professional instruction that meets all regulatory requirements.
-              </p>
+            <div className="flex-1 flex items-center gap-4 px-8 py-6">
+              <CheckCircle2 className="w-5 h-5 text-accent-blue flex-shrink-0" />
+              <div>
+                <h3 className="text-base font-bold text-white mb-1">
+                  Why accreditation matters
+                </h3>
+                <p className="text-text-muted text-sm leading-relaxed">
+                  Our accredited training ensures your certificate is recognized by councils 
+                  across the UK. The programme has been enhanced to provide more comprehensive 
+                  coverage of disability awareness than standard courses, and the RoSPA assurance 
+                  on the driver training element gives you confidence that you&apos;re receiving 
+                  quality, professional instruction that meets all regulatory requirements.
+                </p>
+              </div>
             </div>
           </div>
         </motion.div>

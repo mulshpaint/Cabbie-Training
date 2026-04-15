@@ -148,13 +148,13 @@ export default function Councils() {
         {displayedCouncils.map((council) => (
           <div
             key={council._id}
-            className="bg-navy border border-white/8 rounded-lg px-3.5 py-2.5 flex items-center gap-2 text-sm font-medium text-text-primary transition-all hover:border-accent-blue/60 hover:text-accent-blue hover:bg-accent-blue/5 hover:shadow-md hover:shadow-accent-blue/10"
+            className="bg-navy border border-white/8 rounded-lg px-3.5 py-2.5 flex items-center gap-2 text-sm font-medium text-text-primary"
           >
             <CheckCircle2 className="w-3.5 h-3.5 text-accent-blue flex-shrink-0" />
             {council.name}
           </div>
         ))}
-        <div className="bg-navy border border-dashed border-white/15 rounded-lg px-3.5 py-2.5 flex items-center gap-2 text-sm font-medium text-text-muted transition-all hover:border-accent-blue/60 hover:text-accent-blue">
+        <div className="bg-navy border border-dashed border-white/15 rounded-lg px-3.5 py-2.5 flex items-center gap-2 text-sm font-medium text-text-muted">
           <PlusCircle className="w-3.5 h-3.5 text-accent-blue flex-shrink-0" />
           + More
         </div>

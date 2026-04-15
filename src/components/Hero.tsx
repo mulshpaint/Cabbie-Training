@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { ShieldCheck, Calendar, ArrowRight, GraduationCap, Clock, CheckCircle2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import Image from "next/image";
 import { useState, useEffect } from "react";
 
 export default function Hero() {
@@ -39,13 +40,31 @@ export default function Hero() {
       id="hero"
       className="relative bg-navy pt-28 pb-20 overflow-hidden"
     >
-      {/* Background effects */}
-      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_60%_70%_at_80%_50%,rgba(14,165,233,0.08)_0%,transparent_65%)]" />
+      {/* Background image */}
+      <div className="absolute inset-0 pointer-events-none">
+        <Image
+          src="/heroimage.jpg"
+          alt="Essex taxi training"
+          fill
+          priority
+          className="object-cover"
+          quality={90}
+        />
+        {/* Dark gradient overlays for readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-navy/95 via-navy/85 to-navy/75" />
+        <div className="absolute inset-0 bg-gradient-to-b from-navy/60 via-transparent to-navy/80" />
+        <div className="absolute inset-0 bg-navy/40" />
+      </div>
+
+      {/* Accent gradient effect */}
+      <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_50%_60%_at_20%_50%,rgba(14,165,233,0.06)_0%,transparent_65%)]" />
+      
+      {/* Subtle dot pattern */}
       <div
-        className="absolute inset-0 pointer-events-none"
+        className="absolute inset-0 pointer-events-none opacity-20"
         style={{
           backgroundImage:
-            "radial-gradient(rgba(255,255,255,0.06) 1px, transparent 1px)",
+            "radial-gradient(rgba(255,255,255,0.08) 1px, transparent 1px)",
           backgroundSize: "28px 28px",
         }}
       />

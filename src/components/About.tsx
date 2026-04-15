@@ -45,7 +45,7 @@ export default function About() {
               <h3 className="text-xl font-extrabold text-white mb-1">
                 Wendy Clarke
               </h3>
-              <p className="text-accent-blue text-sm font-semibold mb-3">
+              <p className="text-accent-blue text-sm font-semibold mb-4">
                 Lead PAT Instructor
               </p>
               <p className="text-text-muted text-sm leading-relaxed mb-5">
@@ -71,7 +71,7 @@ export default function About() {
                 coverage. The driver training element is RoSPA assured, giving drivers 
                 confidence in the quality and recognition of their certification.
               </p>
-              <div className="flex flex-wrap justify-center sm:justify-start gap-4">
+              <div className="flex flex-wrap justify-center sm:justify-start gap-4 mb-6">
                 <div className="flex items-center gap-2 text-xs text-text-muted">
                   <Award className="w-4 h-4 text-accent-blue" />
                   13+ years training experience

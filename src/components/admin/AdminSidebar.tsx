@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { signOut } from "next-auth/react";
 import {
   LayoutDashboard,
-  CalendarDays,
+  CalendarRange,
   ClipboardList,
   MessageSquare,
   Star,
@@ -13,13 +13,15 @@ import {
   Users,
   LogOut,
   Home,
+  CalendarClock,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const navItems = [
   { href: "/admin/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/admin/courses", label: "Courses", icon: CalendarDays },
+  { href: "/admin/schedule", label: "Schedule", icon: CalendarRange },
   { href: "/admin/bookings", label: "Bookings", icon: ClipboardList },
+  { href: "/admin/flexible-requests", label: "Flexible Requests", icon: CalendarClock },
   { href: "/admin/contacts", label: "Contacts", icon: MessageSquare },
   { href: "/admin/councils", label: "Councils", icon: MapPin },
   { href: "/admin/reviews", label: "Reviews", icon: Star },

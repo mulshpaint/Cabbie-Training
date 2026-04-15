@@ -8,6 +8,7 @@ export interface ICourse extends Document {
   price: number;
   type: "fixed" | "flexible";
   active: boolean;
+  seriesId?: string;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -21,6 +22,7 @@ const CourseSchema = new Schema<ICourse>(
     price: { type: Number, required: true },
     type: { type: String, enum: ["fixed", "flexible"], required: true },
     active: { type: Boolean, default: true },
+    seriesId: { type: Schema.Types.ObjectId, ref: "CourseSeries" },
   },
   { timestamps: true }
 );

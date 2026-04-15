@@ -236,3 +236,82 @@ export async function sendContactNotification(contact: {
     `,
   });
 }
+
+export async function sendFlexibleRequestConfirmation(data: {
+  firstName: string;
+  lastName: string;
+  email: string;
+}) {
+  await sendEmail({
+    to: [{ email: data.email, name: `${data.firstName} ${data.lastName}` }],
+    subject: "Flexible Booking Request Received — Cabbie Training",
+    htmlContent: emailWrapper(`
+      <h1 style="color: #38bdf8; margin-bottom: 8px;">Request Received!</h1>
+      <p>Hi ${data.firstName},</p>
+      <p>Thank you for your flexible date booking request. We've received your enquiry and will be in touch within 24 hours to discuss available dates that suit you.</p>
+      <p>In the meantime, if you have any questions, feel free to call us on <strong>07739 320050</strong>.</p>
+      <p style="margin-top: 30px;">Talk soon!<br/><strong>Wendy Clarke</strong><br/>Cabbie Training</p>
+    `),
+  });
+}
+
+export async function sendFlexibleRequestNotification(data: {
+  name: string;
+  email: string;
+  phone: string;
+  council: string;
+  preferredDates: string;
+  notes: string;
+}) {
+  await sendEmail({
+    to: [{ email: "info@cabbietraining.co.uk", name: "Cabbie Training" }],
+    subject: `New Flexible Booking Request: ${data.name}`,
+    htmlContent: `
+      <div style="font-family: Arial, sans-serif;">
+        <h2>New Flexible Booking Request</h2>
+        <p><strong>Name:</strong> ${data.name}</p>
+        <p><strong>Email:</strong> <a href="mailto:${data.email}">${data.email}</a></p>
+        <p><strong>Phone:</strong> <a href="tel:${data.phone}">${data.phone}</a></p>
+        <p><strong>Council:</strong> ${data.council}</p>
+        <p><strong>Preferred Dates:</strong></p>
+        <blockquote style="border-left: 3px solid #38bdf8; padding-left: 16px; color: #555; white-space: pre-wrap;">${data.preferredDates}</blockquote>
+        <p><strong>Notes:</strong></p>
+        <blockquote style="border-left: 3px solid #38bdf8; padding-left: 16px; color: #555; white-space: pre-wrap;">${data.notes}</blockquote>
+        <p style="margin-top: 20px;"><em>View and manage this request in your admin panel.</em></p>
+      </div>
+    `,
+  });
+}
+
+export async function sendBookingLinkEmail(data: {
+  firstName: string;
+  lastName: string;
+  email: string;
+  courseDate: string;
+  courseLocation: string;
+  price: number;
+  paymentLink: string;
+}) {
+  await sendEmail({
+    to: [{ email: data.email, name: `${data.firstName} ${data.lastName}` }],
+    subject: "Your PAT Course Booking Link — Cabbie Training",
+    htmlContent: emailWrapper(`
+      <h1 style="color: #38bdf8; margin-bottom: 8px;">Your Booking Link is Ready!</h1>
+      <p>Hi ${data.firstName},</p>
+      <p>Great news! We've confirmed your PAT course date and your booking is ready to complete.</p>
+      ${detailsBlock([
+        { label: "Date & Time", value: data.courseDate },
+        { label: "Location", value: data.courseLocation },
+        { label: "Price", value: `£${data.price}` },
+      ])}
+      <p>Click the button below to complete your payment and secure your place:</p>
+      <div style="text-align: center; margin: 30px 0;">
+        <a href="${data.paymentLink}" style="display: inline-block; background-color: #38bdf8; color: #0d1f3c; font-weight: bold; font-size: 16px; padding: 14px 32px; text-decoration: none; border-radius: 8px;">
+          Complete Payment
+        </a>
+      </div>
+      <p style="font-size: 13px; color: #8899b0;">This link is valid for 24 hours. If you have any questions before completing payment, just reply to this email or call us.</p>
+      <p style="margin-top: 30px;">See you there!<br/><strong>Wendy Clarke</strong><br/>Cabbie Training</p>
+    `),
+  });
+}

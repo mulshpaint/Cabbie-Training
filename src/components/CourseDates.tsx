@@ -26,8 +26,9 @@ import {
 import SectionWrapper from "./SectionWrapper";
 import { motion } from "framer-motion";
 import { toast } from "sonner";
-import { format } from "date-fns";
+import { format, addDays } from "date-fns";
 import Link from "next/link";
+import FlexibleRequestModal from "./FlexibleRequestModal";
 
 interface Course {
   _id: string;
@@ -37,6 +38,13 @@ interface Course {
   spotsRemaining: number;
   price: number;
   type: "fixed" | "flexible";
+}
+
+interface DateGroup {
+  dateKey: string;
+  dateLabel: string;
+  dayLabel: string;
+  courses: Course[];
 }
 
 interface BookingFormData {
@@ -55,6 +63,30 @@ interface CouncilOption {
   displayName: string;
 }
 
+function groupCoursesByDate(courses: Course[]): { fixed: DateGroup[]; flexible: Course[] } {
+  const fixed = courses
+    .filter((c) => c.type === "fixed")
+    .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
+  const groups: DateGroup[] = [];
+  for (const course of fixed) {
+    const d = new Date(course.date);
+    const dateKey = format(d, "yyyy-MM-dd");
+    const existing = groups.find((g) => g.dateKey === dateKey);
+    if (existing) {
+      existing.courses.push(course);
+    } else {
+      groups.push({
+        dateKey,
+        dateLabel: format(d, "d MMMM yyyy"),
+        dayLabel: format(d, "EEEE"),
+        courses: [course],
+      });
+    }
+  }
+  return { fixed: groups, flexible: courses.filter((c) => c.type === "flexible") };
+}
+
 export default function CourseDates() {
   const [courses, setCourses] = useState<Course[]>([]);
   const [councils, setCouncils] = useState<CouncilOption[]>([]);
@@ -62,6 +94,8 @@ export default function CourseDates() {
   const [submitting, setSubmitting] = useState(false);
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [sheetOpen, setSheetOpen] = useState(false);
+  const [showAll, setShowAll] = useState(false);
+  const [flexModalOpen, setFlexModalOpen] = useState(false);
 
   const {
     register,
@@ -154,95 +188,155 @@ export default function CourseDates() {
       </p>
       </motion.div>
 
-      {/* Course Date Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {loading
-          ? Array.from({ length: 4 }).map((_, i) => (
-              <div
-                key={i}
-                className="bg-navy-light border border-white/8 rounded-xl p-5 animate-pulse h-28"
-              />
-            ))
-          : courses.map((course) => (
-              <div
-                key={course._id}
-                className={`bg-navy-light border rounded-xl p-5 flex justify-between items-start gap-4 transition-all hover:border-accent-blue hover:shadow-lg hover:shadow-accent-blue/10 group ${
-                  course.type === "flexible"
-                    ? "border-dashed border-white/20"
-                    : "border-white/8"
-                }`}
-              >
-                {/* Left — date display */}
-                <div className="flex gap-4 items-start">
-                  {course.type !== "flexible" ? (
-                    <div className="bg-navy rounded-xl px-3 py-2 text-center min-w-[52px]">
-                      <div className="text-[0.55rem] font-bold tracking-widest uppercase text-accent-blue">
-                        {format(new Date(course.date), "MMM")}
-                      </div>
-                      <div className="text-2xl font-extrabold text-white leading-none">
-                        {format(new Date(course.date), "d")}
-                      </div>
-                      <div className="text-[0.55rem] text-text-muted uppercase tracking-wide">
-                        {format(new Date(course.date), "EEE")}
-                      </div>
-                    </div>
-                  ) : (
-                    <div className="bg-navy rounded-xl px-3 py-2 text-center min-w-[52px]">
-                      <div className="text-[0.55rem] font-bold tracking-widest uppercase text-accent-blue">
-                        Any
-                      </div>
-                      <div className="text-lg font-extrabold text-white leading-none py-0.5">
-                        Date
-                      </div>
-                      <div className="text-[0.55rem] text-text-muted uppercase tracking-wide">
-                        Flex
-                      </div>
-                    </div>
-                  )}
-                  <div className="pt-0.5">
-                    <div className="text-sm font-bold text-white mb-0.5">
-                      {course.type === "flexible"
-                        ? "Flexible Date"
-                        : format(new Date(course.date), "HH:mm")}
-                    </div>
-                    <div className="text-xs text-text-muted mb-2">
-                      {course.location}
-                    </div>
-                    <Badge
-                      variant="outline"
-                      className={
-                        course.type === "flexible"
-                          ? "bg-accent-blue/10 text-accent-blue border-accent-blue/30 text-xs"
-                          : course.spotsRemaining <= 3
-                          ? "bg-amber/10 text-amber border-amber/30 text-xs"
-                          : "bg-emerald-500/10 text-emerald-500 border-emerald-500/30 text-xs"
-                      }
-                    >
-                      {course.type === "flexible"
-                        ? "Available"
-                        : `${course.spotsRemaining} spot${course.spotsRemaining !== 1 ? "s" : ""} left`}
-                    </Badge>
-                  </div>
-                </div>
+      {/* Course Date Groups */}
+      {loading ? (
+        <div className="border border-white/8 rounded-2xl overflow-hidden divide-y divide-white/8">
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="flex items-center gap-6 p-6">
+              <div className="w-36 shrink-0 space-y-2">
+                <div className="h-3 w-16 bg-white/5 rounded animate-pulse" />
+                <div className="h-10 w-10 bg-white/5 rounded animate-pulse" />
+                <div className="h-3 w-24 bg-white/5 rounded animate-pulse" />
+              </div>
+              <div className="hidden sm:block w-px h-16 bg-white/8" />
+              <div className="flex gap-3 flex-1">
+                <div className="flex-1 max-w-[200px] h-24 bg-white/5 rounded-xl animate-pulse" />
+                <div className="flex-1 max-w-[200px] h-24 bg-white/5 rounded-xl animate-pulse" />
+              </div>
+            </div>
+          ))}
+        </div>
+      ) : (() => {
+        const { fixed: allGroups, flexible: flexibleCourses } = groupCoursesByDate(courses);
+        const cutoff = addDays(new Date(), 30);
+        const visibleGroups = showAll ? allGroups : allGroups.filter((g) => new Date(g.dateKey) <= cutoff);
+        const hiddenCount = allGroups.length - visibleGroups.length;
 
-                {/* Right — price + CTA */}
-                <div className="flex flex-col items-end gap-2 shrink-0">
-                  <div className="text-right">
-                    <div className="text-lg font-extrabold text-white">£{course.price}</div>
-                    <div className="text-[0.6rem] text-text-muted">per person</div>
-                  </div>
-                  <Button
-                    size="sm"
-                    onClick={() => openBookingSheet(course)}
-                    className="font-bold text-xs group-hover:shadow-lg group-hover:shadow-accent-blue/20 transition-all"
+        if (allGroups.length === 0 && flexibleCourses.length === 0) {
+          return (
+            <div className="text-center py-16 border border-white/8 rounded-2xl">
+              <CalendarDays className="w-10 h-10 text-white/15 mx-auto mb-4" />
+              <p className="text-white font-bold mb-1">No upcoming courses</p>
+              <p className="text-text-muted text-sm">
+                <Link href="#contact" className="text-accent-blue hover:underline">Get in touch</Link> to find out about upcoming dates.
+              </p>
+            </div>
+          );
+        }
+
+        return (
+          <div className="space-y-4">
+            {/* Fixed-date courses */}
+            {visibleGroups.length > 0 && (
+              <div className="border border-white/8 rounded-2xl overflow-hidden divide-y divide-white/8">
+                {visibleGroups.map((group) => (
+                  <div
+                    key={group.dateKey}
+                    className="flex flex-col sm:flex-row items-start sm:items-center gap-5 sm:gap-6 px-6 py-5 hover:bg-white/[0.02] transition-colors"
                   >
-                    {course.type === "flexible" ? "Request" : "Book"}
-                    <ChevronRight className="w-3 h-3 ml-0.5" />
-                  </Button>
+                    {/* Date column */}
+                    <div className="shrink-0 sm:w-36">
+                      <div className="text-accent-blue text-[0.65rem] font-bold uppercase tracking-[0.15em] mb-0.5">
+                        {group.dayLabel}
+                      </div>
+                      <div className="text-white text-4xl font-extrabold leading-none">
+                        {format(new Date(group.dateKey), "d")}
+                      </div>
+                      <div className="text-text-muted text-sm mt-1">
+                        {format(new Date(group.dateKey), "MMMM yyyy")}
+                      </div>
+                    </div>
+
+                    {/* Vertical divider (desktop) */}
+                    <div className="hidden sm:block w-px self-stretch bg-white/8" />
+                    {/* Horizontal divider (mobile) */}
+                    <div className="sm:hidden w-full h-px bg-white/8" />
+
+                    {/* Session chips */}
+                    <div className="flex flex-wrap gap-3 flex-1">
+                      {group.courses
+                        .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+                        .map((course) => (
+                          <button
+                            key={course._id}
+                            onClick={() => openBookingSheet(course)}
+                            className="group flex-1 min-w-[150px] max-w-[220px] bg-navy border border-white/10 rounded-xl p-4 text-left hover:border-accent-blue/60 hover:bg-navy-light hover:shadow-xl hover:shadow-accent-blue/10 transition-all cursor-pointer"
+                          >
+                            <div className="text-white font-extrabold text-2xl leading-none mb-1.5">
+                              {format(new Date(course.date), "HH:mm")}
+                            </div>
+                            <div className={`text-xs mb-3 ${
+                              course.spotsRemaining <= 3 ? "text-amber" : "text-text-muted"
+                            }`}>
+                              {course.spotsRemaining === 0
+                                ? "Fully booked"
+                                : `${course.spotsRemaining} of ${course.spotsTotal} spots left`}
+                            </div>
+                            <div className="flex items-center justify-between">
+                              <span className="text-white font-bold text-sm">£{course.price}</span>
+                              <span className="text-accent-blue text-xs font-bold group-hover:translate-x-0.5 transition-transform inline-flex items-center gap-0.5">
+                                Book <ChevronRight className="w-3 h-3" />
+                              </span>
+                            </div>
+                          </button>
+                        ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+
+            {/* View more / collapse */}
+            {!showAll && hiddenCount > 0 && (
+              <button
+                onClick={() => setShowAll(true)}
+                className="w-full py-3.5 text-sm text-text-muted hover:text-white border border-white/8 hover:border-white/20 rounded-2xl transition-all font-medium"
+              >
+                View {hiddenCount} more date{hiddenCount !== 1 ? "s" : ""} &darr;
+              </button>
+            )}
+            {showAll && allGroups.length > 3 && (
+              <button
+                onClick={() => setShowAll(false)}
+                className="w-full py-3.5 text-sm text-text-muted hover:text-white border border-white/8 hover:border-white/20 rounded-2xl transition-all font-medium"
+              >
+                Show fewer dates &uarr;
+              </button>
+            )}
+
+            {/* Flexible / any date */}
+            {flexibleCourses.length > 0 && (
+              <div className="border border-dashed border-white/15 rounded-2xl px-6 py-5 flex flex-col sm:flex-row items-start sm:items-center gap-5 sm:gap-6 hover:bg-white/[0.02] transition-colors">
+                <div className="shrink-0 sm:w-36">
+                  <div className="text-accent-blue text-[0.65rem] font-bold uppercase tracking-[0.15em] mb-0.5">Flexible</div>
+                  <div className="text-white text-4xl font-extrabold leading-none">Any</div>
+                  <div className="text-text-muted text-sm mt-1">Date</div>
+                </div>
+                <div className="hidden sm:block w-px self-stretch bg-white/8" />
+                <div className="sm:hidden w-full h-px bg-white/8" />
+                <div className="flex flex-wrap gap-3 flex-1">
+                  {flexibleCourses.map((course) => (
+                    <button
+                      key={course._id}
+                      onClick={() => setFlexModalOpen(true)}
+                      className="group flex-1 min-w-[150px] max-w-[220px] bg-navy border border-white/10 rounded-xl p-4 text-left hover:border-accent-blue/60 hover:bg-navy-light hover:shadow-xl hover:shadow-accent-blue/10 transition-all cursor-pointer"
+                    >
+                      <div className="text-white font-extrabold text-2xl leading-none mb-1.5">Flexible</div>
+                      <div className="text-text-muted text-xs mb-3">Pick a date that suits you</div>
+                      <div className="flex items-center justify-between">
+                        <span className="text-white font-bold text-sm">£{course.price}</span>
+                        <span className="text-accent-blue text-xs font-bold group-hover:translate-x-0.5 transition-transform inline-flex items-center gap-0.5">
+                          Request <ChevronRight className="w-3 h-3" />
+                        </span>
+                      </div>
+                    </button>
+                  ))}
                 </div>
               </div>
-            ))}
-      </div>
+            )}
+          </div>
+        );
+      })()}
 
       {/* Booking Sheet */}
       <Sheet open={sheetOpen} onOpenChange={(open) => {
@@ -417,6 +511,11 @@ export default function CourseDates() {
           </form>
         </SheetContent>
       </Sheet>
+
+      <FlexibleRequestModal 
+        open={flexModalOpen}
+        onClose={() => setFlexModalOpen(false)}
+      />
       </div>
     </SectionWrapper>
   );

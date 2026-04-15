@@ -1,5 +1,5 @@
 import { redirect } from "next/navigation";
 
-export default function CoursesRedirect() {
+export default function SeriesRedirect() {
   redirect("/admin/schedule");
 }

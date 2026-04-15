@@ -1,10 +1,12 @@
 "use client";
 
+import { useState } from "react";
 import { Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SectionWrapper from "./SectionWrapper";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import FlexibleRequestModal from "./FlexibleRequestModal";
 
 const plans = [
   {
@@ -36,6 +38,8 @@ const plans = [
 ];
 
 export default function Pricing() {
+  const [modalOpen, setModalOpen] = useState(false);
+
   return (
     <SectionWrapper
       id="pricing"
@@ -59,7 +63,7 @@ export default function Pricing() {
       </p>
       </motion.div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 max-w-[680px]">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
         {plans.map((plan) => (
           <div
             key={plan.tier}
@@ -105,8 +109,11 @@ export default function Pricing() {
             </ul>
 
             {plan.featured ? (
-              <Button asChild className="w-full font-bold">
-                <Link href="#booking">Book Now →</Link>
+              <Button 
+                onClick={() => setModalOpen(true)}
+                className="w-full font-bold"
+              >
+                Request a Date →
               </Button>
             ) : (
               <Button
@@ -121,6 +128,11 @@ export default function Pricing() {
         ))}
       </div>
       </div>
+
+      <FlexibleRequestModal 
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+      />
     </SectionWrapper>
   );
 }
