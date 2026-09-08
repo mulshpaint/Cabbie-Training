@@ -1,134 +1,54 @@
 "use client";
 
-import { useForm } from "react-hook-form";
-import { useState } from "react";
-import { Phone, Mail, MapPin, Send, Loader2 } from "lucide-react";
+import { Phone, Mail, MapPin } from "lucide-react";
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { Checkbox } from "@/components/ui/checkbox";
 import SectionWrapper from "./SectionWrapper";
-import { toast } from "sonner";
-import Link from "next/link";
-
-interface ContactFormData {
-  name: string;
-  email: string;
-  phone: string;
-  subject: string;
-  message: string;
-  privacyConsent: boolean;
-}
 
 const contactMethods = [
   {
     icon: Phone,
-    title: "Phone / WhatsApp",
-    detail: "07739 320050 · Mon–Sat, 8am–6pm",
+    label: "Call or WhatsApp",
+    value: "07739 320050",
+    note: "Mon–Sat, 8am–6pm",
     href: "tel:07739320050",
   },
   {
     icon: Mail,
-    title: "Email",
-    detail: "info@cabbietraining.co.uk",
-    href: "mailto:info@cabbietraining.co.uk",
+    label: "Email",
+    value: "info@cabbietraining.co.uk",
+    note: "We'll reply the same day where we can",
+    href: "mailto:info@cabbietraining.co.uk?subject=PAT%20Course%20Enquiry",
   },
   {
     icon: MapPin,
-    title: "Location",
-    detail: "Cottis House, Locks Hills, South Street, Rochford, Essex, SS4 1BB",
+    label: "Training centre",
+    value: "Rochford, Essex",
+    note: "Cottis House, Locks Hills, South Street, SS4 1BB",
     href: null,
   },
 ];
 
 export default function Contact() {
-  const [submitting, setSubmitting] = useState(false);
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    reset,
-    formState: { errors },
-  } = useForm<ContactFormData>();
-
-  register("privacyConsent", { validate: (v) => v === true || "You must agree to the Privacy Policy" });
-
-  const onSubmit = async (data: ContactFormData) => {
-    setSubmitting(true);
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-
-      if (res.ok) {
-        toast.success("Message sent! We'll get back to you shortly.");
-        reset();
-      } else {
-        toast.error("Something went wrong. Please try again.");
-      }
-    } catch {
-      toast.error("Something went wrong. Please try again.");
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
   return (
     <SectionWrapper id="contact" className="py-20">
       <div className="max-w-7xl mx-auto px-[5%]">
-      <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.4fr] gap-12 items-start">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
+          className="text-center max-w-[560px] mx-auto mb-10"
         >
           <div className="text-xs font-bold tracking-[2px] uppercase text-accent-blue mb-2">
             Get in Touch
           </div>
           <h2 className="text-[clamp(1.6rem,3vw,2.3rem)] font-extrabold leading-tight tracking-tight text-white mb-3">
-            Any questions?
+            Ready when you are
           </h2>
-          <p className="text-text-muted text-[0.925rem] leading-relaxed mb-6">
-            Whether you want to check your council accepts our cert, ask about a
-            date, or anything else — we&apos;re happy to help.
+          <p className="text-text-muted text-[0.975rem] leading-relaxed">
+            Book a place, check your council accepts our certificate, or just
+            ask a question — Wendy will pick up.
           </p>
-
-          <div className="flex flex-col gap-3">
-            {contactMethods.map((method) => {
-              const Wrapper = method.href ? "a" : "div";
-              return (
-                <Wrapper
-                  key={method.title}
-                  {...(method.href ? { href: method.href } : {})}
-                  className="flex items-center gap-3.5 bg-navy-light border border-white/8 rounded-xl px-4 py-3.5 text-text-primary transition-all hover:border-accent-blue hover:shadow-lg hover:shadow-accent-blue/10 no-underline"
-                >
-                  <div className="w-9 h-9 min-w-[36px] bg-accent-blue/10 rounded-lg flex items-center justify-center text-accent-blue">
-                    <method.icon className="w-4 h-4" />
-                  </div>
-                  <div>
-                    <strong className="block text-[0.8rem] font-bold text-white mb-0.5">
-                      {method.title}
-                    </strong>
-                    <span className="text-[0.8rem] text-text-muted">
-                      {method.detail}
-                    </span>
-                  </div>
-                </Wrapper>
-              );
-            })}
-          </div>
         </motion.div>
 
         <motion.div
@@ -136,125 +56,38 @@ export default function Contact() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.15 }}
-          className="bg-navy-light border border-white/8 rounded-2xl p-6 md:p-8 shadow-lg"
+          className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-[980px] mx-auto"
         >
-          <h3 className="text-lg font-extrabold text-white mb-5">
-            Send a message
-          </h3>
-
-          <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div>
-              <Label htmlFor="contact-name">Name</Label>
-              <Input
-                id="contact-name"
-                placeholder="Full name"
-                {...register("name", { required: "Name is required" })}
-                className="mt-1"
-              />
-              {errors.name && (
-                <p className="text-red-400 text-xs mt-1">
-                  {errors.name.message}
-                </p>
-              )}
-            </div>
-            <div>
-              <Label htmlFor="contact-email">Email</Label>
-              <Input
-                id="contact-email"
-                type="email"
-                placeholder="your@email.com"
-                {...register("email", { required: "Email is required" })}
-                className="mt-1"
-              />
-              {errors.email && (
-                <p className="text-red-400 text-xs mt-1">
-                  {errors.email.message}
-                </p>
-              )}
-            </div>
-            <div>
-              <Label htmlFor="contact-phone">Phone (optional)</Label>
-              <Input
-                id="contact-phone"
-                type="tel"
-                placeholder="07700 000000"
-                {...register("phone")}
-                className="mt-1"
-              />
-            </div>
-            <div>
-              <Label>Subject</Label>
-              <Select onValueChange={(val) => setValue("subject", val)}>
-                <SelectTrigger className="mt-1">
-                  <SelectValue placeholder="Select a subject…" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="General enquiry">
-                    General enquiry
-                  </SelectItem>
-                  <SelectItem value="Council acceptance check">
-                    Council acceptance check
-                  </SelectItem>
-                  <SelectItem value="Booking question">
-                    Booking question
-                  </SelectItem>
-                  <SelectItem value="Other">Other</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div>
-              <Label htmlFor="contact-message">Message</Label>
-              <Textarea
-                id="contact-message"
-                placeholder="How can we help?"
-                {...register("message", { required: "Message is required" })}
-                className="mt-1"
-              />
-              {errors.message && (
-                <p className="text-red-400 text-xs mt-1">
-                  {errors.message.message}
-                </p>
-              )}
-            </div>
-
-            <div className="flex items-start gap-2">
-              <Checkbox
-                id="contact-privacy"
-                onCheckedChange={(checked) =>
-                  setValue("privacyConsent", checked === true, { shouldValidate: true })
-                }
-                className="mt-0.5"
-              />
-              <label htmlFor="contact-privacy" className="text-xs text-text-muted leading-relaxed cursor-pointer">
-                I agree to the{" "}
-                <Link href="/privacy-policy" target="_blank" className="text-accent-blue hover:underline">
-                  Privacy Policy
-                </Link>
-                . My data will be used to respond to this enquiry.
-              </label>
-            </div>
-            {errors.privacyConsent && (
-              <p className="text-red-400 text-xs">
-                {errors.privacyConsent.message}
-              </p>
-            )}
-
-            <Button
-              type="submit"
-              disabled={submitting}
-              className="w-full font-bold"
-              size="lg"
-            >
-              {submitting ? (
-                <Loader2 className="w-4 h-4 mr-1 animate-spin" />
-              ) : (
-                <Send className="w-4 h-4 mr-1" />
-              )}
-              Send Message
-            </Button>
-          </form>
+          {contactMethods.map((method) => {
+            const Wrapper = method.href ? "a" : "div";
+            return (
+              <Wrapper
+                key={method.label}
+                {...(method.href ? { href: method.href } : {})}
+                className={`flex flex-col items-center text-center gap-3 rounded-2xl border border-white/8 bg-navy-light px-6 py-8 no-underline transition-all ${
+                  method.href
+                    ? "hover:border-accent-blue hover:-translate-y-0.5 hover:shadow-xl hover:shadow-accent-blue/10"
+                    : ""
+                }`}
+              >
+                <div className="w-12 h-12 rounded-2xl bg-accent-blue/10 flex items-center justify-center text-accent-blue">
+                  <method.icon className="w-5 h-5" />
+                </div>
+                <div>
+                  <div className="text-[0.65rem] font-bold tracking-widest uppercase text-text-muted mb-1.5">
+                    {method.label}
+                  </div>
+                  <div className="text-[0.95rem] font-extrabold text-white mb-1.5 break-words">
+                    {method.value}
+                  </div>
+                  <div className="text-xs text-text-muted leading-relaxed">
+                    {method.note}
+                  </div>
+                </div>
+              </Wrapper>
+            );
+          })}
         </motion.div>
-      </div>
       </div>
     </SectionWrapper>
   );

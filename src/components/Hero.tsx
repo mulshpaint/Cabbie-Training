@@ -1,9 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ShieldCheck, Calendar, ArrowRight, GraduationCap, Clock, CheckCircle2 } from "lucide-react";
+import { ShieldCheck, Phone, Mail, GraduationCap, CheckCircle2, BadgeCheck } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 
@@ -31,7 +30,7 @@ export default function Hero() {
       value: councilCount ? `${councilCount}+` : "20+",
       label: "Councils accepting\nour certificate",
     },
-    { value: "~4hrs", label: "Course duration —\npractical & focused" },
+    { value: "£75", label: "One price —\neverything included" },
     { value: "Same day", label: "Certificate issued\non the day" },
   ];
 
@@ -58,7 +57,7 @@ export default function Hero() {
 
       {/* Accent gradient effect */}
       <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_50%_60%_at_20%_50%,rgba(14,165,233,0.06)_0%,transparent_65%)]" />
-      
+
       {/* Subtle dot pattern */}
       <div
         className="absolute inset-0 pointer-events-none opacity-20"
@@ -99,10 +98,11 @@ export default function Hero() {
             transition={{ duration: 0.5, delay: 0.2 }}
             className="text-base text-white/60 max-w-[480px] mb-8 leading-relaxed"
           >
-            In-person, hands-on Passenger Assistance Training at our Essex training 
-            centre. Face-to-face instruction for practical skills like wheelchair 
-            handling and safe securing—essential techniques that can&apos;t be taught 
-            online. Book a date, get your accredited certificate the same day.
+            In-person, hands-on Passenger Assistance Training at our Essex training
+            centre. Face-to-face instruction for practical skills like wheelchair
+            handling and safe securing—essential techniques that can&apos;t be taught
+            online. Just <strong className="text-white font-semibold">£75</strong>, with your
+            accredited certificate issued on the day.
           </motion.p>
 
           <motion.div
@@ -112,10 +112,10 @@ export default function Hero() {
             className="flex gap-3 flex-wrap"
           >
             <Button asChild size="lg" className="font-bold shadow-lg shadow-accent-blue/30">
-              <Link href="#booking">
-                <Calendar className="w-4 h-4 mr-1" />
-                See Dates & Book
-              </Link>
+              <a href="tel:07739320050">
+                <Phone className="w-4 h-4 mr-1" />
+                Call 07739 320050
+              </a>
             </Button>
             <Button
               asChild
@@ -123,10 +123,10 @@ export default function Hero() {
               size="lg"
               className="bg-white/10 border-white/20 text-white hover:bg-white/[0.18] hover:border-white/40 hover:text-white font-bold"
             >
-              <Link href="#pricing">
-                View Pricing
-                <ArrowRight className="w-4 h-4 ml-1" />
-              </Link>
+              <a href="mailto:info@cabbietraining.co.uk?subject=PAT%20Course%20Booking">
+                <Mail className="w-4 h-4 mr-1" />
+                Email to Book
+              </a>
             </Button>
           </motion.div>
 
@@ -194,14 +194,14 @@ export default function Hero() {
 
               {/* Footer */}
               <div className="bg-navy rounded-xl px-4 py-3 flex items-center gap-3">
-                <Clock className="w-4 h-4 text-accent-blue flex-shrink-0" />
+                <BadgeCheck className="w-4 h-4 text-accent-blue flex-shrink-0" />
                 <div>
-                  <div className="text-xs font-bold text-white">~4 hours</div>
-                  <div className="text-[0.65rem] text-text-muted">Certificate same day</div>
+                  <div className="text-xs font-bold text-white">Certificate same day</div>
+                  <div className="text-[0.65rem] text-text-muted">Accredited</div>
                 </div>
                 <div className="ml-auto text-right">
                   <div className="text-xs font-bold text-white">£75</div>
-                  <div className="text-[0.65rem] text-text-muted">from</div>
+                  <div className="text-[0.65rem] text-text-muted">per person</div>
                 </div>
               </div>
             </div>

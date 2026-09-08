@@ -32,8 +32,7 @@ export default function PrivacyPolicyPage() {
             </h2>
             <p>
               Cabbie Training provides accredited Passenger Assistance Training
-              (PAT) for taxi and private hire drivers. Our registered address is
-              Cottis House, Locks Hills, South Street, Rochford, Essex, SS4 1BB.
+              (PAT) for taxi and private hire drivers.
             </p>
             <p className="mt-2">
               For any data protection queries, contact us at{" "}
@@ -54,14 +53,12 @@ export default function PrivacyPolicyPage() {
             <p>We collect the following personal data:</p>
             <ul className="list-disc pl-5 mt-2 space-y-1 text-text-muted">
               <li>
-                <strong className="text-text-primary">Booking form:</strong>{" "}
-                first name, last name, email address, phone number, licensing
-                council, and any optional notes you provide.
-              </li>
-              <li>
-                <strong className="text-text-primary">Contact form:</strong>{" "}
-                name, email address, phone number (optional), subject, and
-                message.
+                <strong className="text-text-primary">
+                  Booking enquiries:
+                </strong>{" "}
+                when you contact us by phone or email to book a course, we
+                record the details you give us — such as your name, contact
+                details and licensing council — in order to arrange your place.
               </li>
               <li>
                 <strong className="text-text-primary">Payment data:</strong>{" "}

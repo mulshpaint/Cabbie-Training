@@ -4,14 +4,11 @@ import Link from "next/link";
 import Image from "next/image";
 
 const footerLinks = [
-  { href: "#booking", label: "Dates" },
-  { href: "#pricing", label: "Pricing" },
+  { href: "#book", label: "Booking" },
   { href: "#course", label: "Course" },
   { href: "#councils", label: "Councils" },
   { href: "#faq", label: "FAQ" },
   { href: "#contact", label: "Contact" },
-  { href: "/privacy-policy", label: "Privacy Policy" },
-  { href: "/cookie-policy", label: "Cookie Policy" },
 ];
 
 export default function Footer() {
@@ -25,8 +22,8 @@ export default function Footer() {
               Cabbie<span className="text-accent-blue">Training</span>
             </Link>
             <p className="text-white/50 text-sm leading-relaxed">
-              Accredited PAT training for Essex taxi & private hire drivers.
-              Certificate issued on the day.
+              Accredited PAT training for Essex taxi &amp; private hire drivers.
+              £75 per person, certificate issued on the day.
             </p>
           </div>
 
@@ -36,7 +33,7 @@ export default function Footer() {
               Quick Links
             </p>
             <ul className="flex flex-col gap-2.5 list-none">
-              {footerLinks.slice(0, 6).map((link) => (
+              {footerLinks.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
@@ -69,10 +66,6 @@ export default function Footer() {
                 <span className="text-base">✉</span>
                 <span>info@cabbietraining.co.uk</span>
               </a>
-              <p className="text-white/40 text-sm flex items-start gap-2">
-                <span className="text-base">📍</span>
-                <span>Cottis House, Rochford,<br />Essex SS4 1BB</span>
-              </p>
             </div>
           </div>
 

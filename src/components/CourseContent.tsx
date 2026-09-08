@@ -1,14 +1,13 @@
 "use client";
 
 import {
-  Clock,
   HeartHandshake,
   Hand,
   Accessibility,
   Scale,
   MessageCircle,
   GraduationCap,
-  Calendar,
+  ArrowRight,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import SectionWrapper from "./SectionWrapper";
@@ -16,11 +15,6 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 
 const modules = [
-  {
-    icon: Clock,
-    title: "Duration",
-    desc: "Around 4 hours, practical and focused",
-  },
   {
     icon: HeartHandshake,
     title: "Disability Awareness",
@@ -66,15 +60,15 @@ export default function CourseContent() {
             What&apos;s covered
           </h2>
           <p className="text-text-muted text-[0.975rem] leading-relaxed max-w-[520px] mb-6">
-            Everything your council needs, delivered in around 4 hours of 
-            in-person, hands-on training. Face-to-face instruction ensures you 
-            master practical skills like wheelchair handling and safe securing 
-            that simply can&apos;t be taught effectively online.
+            Everything your council needs, delivered as in-person, hands-on
+            training. Face-to-face instruction ensures you master practical
+            skills like wheelchair handling and safe securing that simply
+            can&apos;t be taught effectively online.
           </p>
           <Button asChild className="font-bold">
-            <Link href="#booking">
-              <Calendar className="w-4 h-4 mr-1" />
-              Book Your Place
+            <Link href="#book">
+              Book Your Place — £75
+              <ArrowRight className="w-4 h-4 ml-1" />
             </Link>
           </Button>
         </motion.div>

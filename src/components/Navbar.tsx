@@ -3,13 +3,12 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { Menu, X, Settings, Car } from "lucide-react";
+import { Menu, X, Settings, Car, Phone, Mail } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 
 const navLinks = [
-  { href: "#booking", label: "Dates & Booking" },
-  { href: "#pricing", label: "Pricing" },
+  { href: "#book", label: "Booking" },
   { href: "#course", label: "Course" },
   { href: "#councils", label: "Councils" },
   { href: "#faq", label: "FAQ" },
@@ -60,7 +59,10 @@ export default function Navbar() {
         ))}
         <li>
           <Button asChild size="sm" className="font-bold">
-            <Link href="#booking">Book Now</Link>
+            <a href="tel:07739320050">
+              <Phone className="w-3.5 h-3.5 mr-1" />
+              Call to Book
+            </a>
           </Button>
         </li>
         {session && (
@@ -105,7 +107,21 @@ export default function Navbar() {
                 className="mt-4 w-full font-bold"
                 onClick={() => setOpen(false)}
               >
-                <Link href="#booking">Book a Course →</Link>
+                <a href="tel:07739320050">
+                  <Phone className="w-4 h-4 mr-1.5" />
+                  Call 07739 320050
+                </a>
+              </Button>
+              <Button
+                asChild
+                variant="outline"
+                className="mt-2 w-full font-semibold border-white/10 text-text-primary hover:border-accent-blue hover:text-accent-blue"
+                onClick={() => setOpen(false)}
+              >
+                <a href="mailto:info@cabbietraining.co.uk?subject=PAT%20Course%20Booking">
+                  <Mail className="w-4 h-4 mr-1.5" />
+                  Email to Book
+                </a>
               </Button>
               {session && (
                 <Link

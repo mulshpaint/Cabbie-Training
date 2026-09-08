@@ -63,7 +63,6 @@ const emailWrapper = (content: string) => `
     ${content}
     <hr style="border: none; border-top: 1px solid #1e3a5f; margin: 30px 0 20px;" />
     <p style="font-size: 13px; color: #8899b0;">If you have any questions, reply to this email or call us on <strong>07739 320050</strong>.</p>
-    <p style="font-size: 13px; color: #8899b0;">Cabbie Training — Cottis House, Locks Hills, South Street, Rochford, Essex, SS4 1BB</p>
   </div>
 `;
 
@@ -107,8 +106,6 @@ export async function sendBookingConfirmation(booking: BookingEmailData) {
         <li>Photo ID</li>
         <li>That's it — all materials are provided!</li>
       </ul>
-      <h3 style="color: #38bdf8;">Location</h3>
-      <p>Cottis House, Locks Hills, South Street, Rochford, Essex, SS4 1BB</p>
       <p style="margin-top: 30px;">See you there!<br/><strong>Wendy Clarke</strong><br/>Cabbie Training</p>
     `),
   });

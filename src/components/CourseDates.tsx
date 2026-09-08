@@ -181,7 +181,7 @@ export default function CourseDates() {
         Pick a date & book
       </h2>
       <p className="text-text-muted text-[0.975rem] leading-relaxed max-w-[520px] mb-10">
-        All courses at Cottis House, Rochford, Essex. Need a different date?{" "}
+        Need a different date?{" "}
         <Link href="#contact" className="text-accent-blue hover:underline">
           Get in touch.
         </Link>

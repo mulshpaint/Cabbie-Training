@@ -11,14 +11,19 @@ import { motion } from "framer-motion";
 
 const faqs = [
   {
+    question: "How do I book a place?",
+    answer:
+      "Give us a call or send an email — that's it. We'll talk you through what's involved, answer any questions, and get you booked in. No online forms to fill out.",
+  },
+  {
     question: "Is your course accepted by my council?",
     answer:
       "We're accepted by 20+ councils across Essex including Southend-on-Sea, Chelmsford, Basildon, Thurrock, Castle Point, Rochford, Maldon, Braintree, Colchester and more. Not sure? Contact us and we'll confirm before you book.",
   },
   {
-    question: "How long is the course?",
+    question: "How much does it cost?",
     answer:
-      "Around 4 hours. Covers both theory and hands-on practical training.",
+      "£75 per person, all in. That covers the accredited course, all materials, and your certificate — there's nothing extra to pay.",
   },
   {
     question: "Do I get my certificate on the same day?",
@@ -26,19 +31,19 @@ const faqs = [
       "Yes — issued on the day. Take it straight to your council or use it for your renewal immediately.",
   },
   {
-    question: "Can I pick my own date?",
-    answer:
-      'Yes. Our flexible option (£95) lets you request any date that suits. Select "Flexible Date" when you book.',
-  },
-  {
     question: "What do I need to bring?",
     answer:
-      "Just yourself and photo ID. All materials are provided. We'll send full joining instructions when you confirm.",
+      "Just yourself and photo ID. All materials are provided. We'll send full joining instructions once your place is confirmed.",
+  },
+  {
+    question: "Can you work around my shifts?",
+    answer:
+      "We'll do our best. Get in touch and let us know what suits you — we'll find something that works.",
   },
   {
     question: "How do I pay?",
     answer:
-      "You'll be directed to our secure Stripe checkout after submitting your booking. Card payments accepted. Nothing taken until your place is confirmed.",
+      "We'll arrange payment with you when we confirm your booking. Just call or email and we'll explain the options.",
   },
 ];
 

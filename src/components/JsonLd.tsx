@@ -8,19 +8,7 @@ export function JsonLd() {
     url: "https://cabbietraining.co.uk",
     telephone: "07739320050",
     email: "info@cabbietraining.co.uk",
-    address: {
-      "@type": "PostalAddress",
-      streetAddress: "Cottis House, Locks Hills, South Street",
-      addressLocality: "Rochford",
-      addressRegion: "Essex",
-      postalCode: "SS4 1BB",
-      addressCountry: "GB",
-    },
-    geo: {
-      "@type": "GeoCoordinates",
-      latitude: 51.5819,
-      longitude: 0.7073,
-    },
+
     founder: {
       "@type": "Person",
       name: "Wendy Clarke",
@@ -29,7 +17,7 @@ export function JsonLd() {
         "Licensed taxi driver since 2000 with 16 years as a disability driver. Delivering Disability Awareness and Passenger Assistance Training since 2012.",
     },
     openingHours: "Mo-Sa 08:00-18:00",
-    priceRange: "£65-£75",
+    priceRange: "£75",
     image: "https://cabbietraining.co.uk/og-image.jpg",
     sameAs: [],
   };

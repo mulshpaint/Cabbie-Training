@@ -13,7 +13,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "Cabbie Training | PAT Certificate | Essex",
   description:
-    "Accredited Passenger Assistance Training for taxi and private hire drivers across Essex. Get your PAT certificate in just 4 hours. Accepted by 20+ councils.",
+    "Accredited Passenger Assistance Training for taxi and private hire drivers across Essex. £75 per person, certificate issued on the day. Accepted by councils across Essex. Call or email to book.",
   keywords: [
     "PAT training",
     "passenger assistance training",
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Cabbie Training | PAT Certificate | Essex",
     description:
-      "Accredited Passenger Assistance Training for taxi and private hire drivers across Essex. Get your PAT certificate in just 4 hours.",
+      "Accredited Passenger Assistance Training for taxi and private hire drivers across Essex. £75 per person, certificate issued on the day.",
     url: "https://cabbietraining.co.uk",
     siteName: "Cabbie Training",
     locale: "en_GB",

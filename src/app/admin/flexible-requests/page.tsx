@@ -64,7 +64,7 @@ export default function AdminFlexibleRequests() {
   // Booking link form state
   const [courseDate, setCourseDate] = useState("");
   const [courseTime, setTime] = useState("");
-  const [courseLocation, setLocation] = useState("Cottis House, Rochford, Essex");
+  const [courseLocation, setLocation] = useState("");
   const [coursePrice, setPrice] = useState(95);
   const [sendingLink, setSendingLink] = useState(false);
 
@@ -186,7 +186,7 @@ export default function AdminFlexibleRequests() {
         setBookingLinkModalOpen(false);
         setCourseDate("");
         setTime("");
-        setLocation("Cottis House, Rochford, Essex");
+        setLocation("");
         setPrice(95);
         fetchRequests();
       } else {
@@ -514,7 +514,7 @@ export default function AdminFlexibleRequests() {
                     id="course-location"
                     value={courseLocation}
                     onChange={(e) => setLocation(e.target.value)}
-                    placeholder="Cottis House, Rochford, Essex"
+                    placeholder="Course location"
                     className="mt-1"
                   />
                 </div>
