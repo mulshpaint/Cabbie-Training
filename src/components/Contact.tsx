@@ -1,6 +1,6 @@
 "use client";
 
-import { Phone, Mail, MapPin } from "lucide-react";
+import { Phone, Mail } from "lucide-react";
 import { motion } from "framer-motion";
 import SectionWrapper from "./SectionWrapper";
 
@@ -18,13 +18,6 @@ const contactMethods = [
     value: "info@cabbietraining.co.uk",
     note: "We'll reply the same day where we can",
     href: "mailto:info@cabbietraining.co.uk?subject=PAT%20Course%20Enquiry",
-  },
-  {
-    icon: MapPin,
-    label: "Training centre",
-    value: "Rochford, Essex",
-    note: "Cottis House, Locks Hills, South Street, SS4 1BB",
-    href: null,
   },
 ];
 
@@ -56,7 +49,7 @@ export default function Contact() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.15 }}
-          className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-[980px] mx-auto"
+          className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-[680px] mx-auto"
         >
           {contactMethods.map((method) => {
             const Wrapper = method.href ? "a" : "div";

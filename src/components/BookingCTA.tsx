@@ -1,6 +1,6 @@
 "use client";
 
-import { Phone, Mail, Check, ArrowRight, Clock, MapPin } from "lucide-react";
+import { Phone, Mail, Check, ArrowRight, Clock } from "lucide-react";
 import SectionWrapper from "./SectionWrapper";
 import { motion } from "framer-motion";
 
@@ -137,22 +137,13 @@ export default function BookingCTA() {
                   </a>
                 </div>
 
-                <div className="mt-6 pt-5 border-t border-white/8 space-y-2.5">
+                <div className="mt-6 pt-5 border-t border-white/8">
                   <div className="flex items-start gap-2.5 text-xs text-text-muted leading-relaxed">
                     <Clock className="w-3.5 h-3.5 text-accent-blue flex-shrink-0 mt-0.5" />
                     <span>
                       Lines open{" "}
                       <strong className="text-text-primary font-semibold">
                         Mon–Sat, 8am–6pm
-                      </strong>
-                    </span>
-                  </div>
-                  <div className="flex items-start gap-2.5 text-xs text-text-muted leading-relaxed">
-                    <MapPin className="w-3.5 h-3.5 text-accent-blue flex-shrink-0 mt-0.5" />
-                    <span>
-                      Training centre in{" "}
-                      <strong className="text-text-primary font-semibold">
-                        Rochford, Essex
                       </strong>
                     </span>
                   </div>
